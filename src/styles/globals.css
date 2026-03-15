@@ -1,0 +1,157 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --neon-blue: #00d4ff;
+    --neon-cyan: #00ffee;
+    --neon-purple: #7b2fff;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Exo 2', sans-serif;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .dark body {
+    background-color: #020408;
+    color: #e2e8f0;
+  }
+
+  :not(.dark) body {
+    background-color: #f0f4f8;
+    color: #1a202c;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #020408;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #00d4ff;
+    border-radius: 3px;
+  }
+}
+
+@layer components {
+  .glass-dark {
+    background: rgba(8, 20, 34, 0.7);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 212, 255, 0.15);
+  }
+
+  .glass-light {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 100, 200, 0.2);
+  }
+
+  .neon-text {
+    color: #00d4ff;
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.8), 0 0 20px rgba(0, 212, 255, 0.4);
+  }
+
+  .neon-border {
+    border: 1px solid rgba(0, 212, 255, 0.4);
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.2), inset 0 0 10px rgba(0, 212, 255, 0.05);
+  }
+
+  .neon-border-light {
+    border: 1px solid rgba(0, 100, 200, 0.3);
+    box-shadow: 0 0 10px rgba(0, 100, 200, 0.1);
+  }
+
+  .grid-bg {
+    background-image: 
+      linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+
+  .grid-bg-light {
+    background-image: 
+      linear-gradient(rgba(0, 100, 200, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 100, 200, 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+
+  .btn-primary {
+    @apply px-6 py-3 font-display text-sm font-bold uppercase tracking-widest transition-all duration-300 relative overflow-hidden;
+  }
+
+  .scan-line {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+    opacity: 0.3;
+    animation: scan 6s linear infinite;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .corner-tl::before,
+  .corner-tl::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 16px;
+    height: 16px;
+  }
+  .corner-tl::before { border-top: 2px solid #00d4ff; border-left: 2px solid #00d4ff; }
+}
+
+@keyframes scan {
+  0% { top: -2px; }
+  100% { top: 100vh; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-15px) rotate(5deg); }
+  66% { transform: translateY(-8px) rotate(-3deg); }
+}
+
+@keyframes orbit {
+  from { transform: rotate(var(--start-angle)) translateX(var(--orbit-radius)) rotate(calc(-1 * var(--start-angle))); }
+  to { transform: rotate(calc(var(--start-angle) + 360deg)) translateX(var(--orbit-radius)) rotate(calc(-1 * (var(--start-angle) + 360deg))); }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1 }
+  50% { opacity: 0 }
+}
+
+.typing-cursor::after {
+  content: '|';
+  animation: blink 1s infinite;
+  color: #00d4ff;
+}
