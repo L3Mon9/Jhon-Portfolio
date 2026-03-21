@@ -3,9 +3,6 @@ import { motion } from 'framer-motion'
 import { ChevronDown, Zap, Eye } from 'lucide-react'
 import logo from '../assets/profile.png'
 
-// ──────────────────────────────────────────────
-// Floating icon positions (around profile circle)
-// ──────────────────────────────────────────────
 const floatingIcons = [
   { label: 'n8n',     color: '#ff6b35', angle: 0   },
   { label: 'Make',    color: '#a020f0', angle: 45  },
@@ -17,13 +14,10 @@ const floatingIcons = [
   { label: 'Sheets',  color: '#0f9d58', angle: 315 },
 ]
 
-// ──────────────────────────────────────────────
-// TypeWriter
-// ──────────────────────────────────────────────
 function TypeWriter({ texts, isDark }) {
-  const [idx, setIdx]       = useState(0)
-  const [sub, setSub]       = useState(0)
-  const [deleting, setDel]  = useState(false)
+  const [idx, setIdx]      = useState(0)
+  const [sub, setSub]      = useState(0)
+  const [deleting, setDel] = useState(false)
 
   useEffect(() => {
     const current = texts[idx]
@@ -47,9 +41,6 @@ function TypeWriter({ texts, isDark }) {
   )
 }
 
-// ──────────────────────────────────────────────
-// Lightning Network Canvas (background lines + packets)
-// ──────────────────────────────────────────────
 function LightningNetwork({ isDark, containerRef }) {
   const canvasRef = useRef(null)
 
@@ -179,10 +170,6 @@ function LightningNetwork({ isDark, containerRef }) {
   )
 }
 
-// ──────────────────────────────────────────────
-// MASSIVE ELECTRIC STORM — hover canvas over profile
-// Covers the ENTIRE section height, anchored on the circle center
-// ──────────────────────────────────────────────
 function ElectricStorm({ active, circleRef, sectionRef }) {
   const canvasRef = useRef(null)
   const stateRef  = useRef({ active: false, bolts: [], sparks: [], time: 0 })
@@ -209,7 +196,6 @@ function ElectricStorm({ active, circleRef, sectionRef }) {
     resize()
     window.addEventListener('resize', resize)
 
-    // Get center of the circle relative to the section
     const getCircleCenter = () => {
       const sec  = sectionRef?.current
       const circ = circleRef?.current
@@ -223,14 +209,11 @@ function ElectricStorm({ active, circleRef, sectionRef }) {
       }
     }
 
-    // ── Bolt: jagged lightning branch from circle edge outward ──
     const spawnBolt = () => {
       const { x: cx, y: cy, r } = getCircleCenter()
-      // random angle on circle rim
       const angle  = Math.random() * Math.PI * 2
       const startX = cx + Math.cos(angle) * r
       const startY = cy + Math.sin(angle) * r
-      // travel outward 200–600px in that direction, with huge jitter
       const length = 180 + Math.random() * 420
       const points = [{ x: startX, y: startY }]
       const steps  = 10 + Math.floor(Math.random() * 8)
@@ -239,12 +222,8 @@ function ElectricStorm({ active, circleRef, sectionRef }) {
       for (let s = 1; s <= steps; s++) {
         const jitter = (Math.random() - 0.5) * 60
         const perp   = (Math.random() - 0.5) * 80
-        points.push({
-          x: startX + dx * s + jitter,
-          y: startY + dy * s + perp,
-        })
+        points.push({ x: startX + dx * s + jitter, y: startY + dy * s + perp })
       }
-      // optional branch
       const branches = []
       if (Math.random() > 0.45) {
         const branchAt = 3 + Math.floor(Math.random() * 4)
@@ -271,7 +250,6 @@ function ElectricStorm({ active, circleRef, sectionRef }) {
       }
     }
 
-    // ── Spark: tiny glowing dot exploding from circle rim ──
     const spawnSparks = (count = 12) => {
       const { x: cx, y: cy, r } = getCircleCenter()
       const sparks = []
@@ -279,8 +257,7 @@ function ElectricStorm({ active, circleRef, sectionRef }) {
         const angle = Math.random() * Math.PI * 2
         const speed = 3 + Math.random() * 9
         sparks.push({
-          x: cx + Math.cos(angle) * r,
-          y: cy + Math.sin(angle) * r,
+          x: cx + Math.cos(angle) * r, y: cy + Math.sin(angle) * r,
           vx: Math.cos(angle) * speed + (Math.random() - 0.5) * 4,
           vy: Math.sin(angle) * speed + (Math.random() - 0.5) * 4,
           life: 0, maxLife: 18 + Math.floor(Math.random() * 20),
@@ -291,13 +268,11 @@ function ElectricStorm({ active, circleRef, sectionRef }) {
       return sparks
     }
 
-    // ── Ring pulse: expanding neon ring from circle ──
     const rings = []
     const spawnRing = () => {
       const { x, y, r } = getCircleCenter()
       rings.push({
-        x, y, r,
-        radius: r, maxRadius: r + 300 + Math.random() * 250,
+        x, y, r, radius: r, maxRadius: r + 300 + Math.random() * 250,
         life: 0, maxLife: 40,
         color: ['#00d4ff','#7b2fff','#00ffee'][Math.floor(Math.random() * 3)],
       })
@@ -311,104 +286,62 @@ function ElectricStorm({ active, circleRef, sectionRef }) {
       state.time++
 
       if (state.active) {
-        boltTimer++
-        sparkTimer++
-        ringTimer++
-
-        // spawn bolts rapidly
-        if (boltTimer >= 2) { // every 2 frames = very rapid
+        boltTimer++; sparkTimer++; ringTimer++
+        if (boltTimer >= 2) {
           const count = 2 + Math.floor(Math.random() * 3)
           for (let i = 0; i < count; i++) state.bolts.push(spawnBolt())
           boltTimer = 0
         }
-        // spawn sparks
-        if (sparkTimer >= 4) {
-          state.sparks.push(...spawnSparks(16))
-          sparkTimer = 0
-        }
-        // spawn rings
-        if (ringTimer >= 18) {
-          spawnRing()
-          ringTimer = 0
-        }
+        if (sparkTimer >= 4) { state.sparks.push(...spawnSparks(16)); sparkTimer = 0 }
+        if (ringTimer >= 18) { spawnRing(); ringTimer = 0 }
       }
 
-      // ── Draw & age rings ──
       for (let i = rings.length - 1; i >= 0; i--) {
-        const ring = rings[i]
-        ring.life++
+        const ring = rings[i]; ring.life++
         ring.radius += (ring.maxRadius - ring.r) / ring.maxLife
         const progress = ring.life / ring.maxLife
         const alpha    = (1 - progress) * 0.5
         if (alpha <= 0 || ring.life >= ring.maxLife) { rings.splice(i, 1); continue }
-        ctx.save()
-        ctx.beginPath()
+        ctx.save(); ctx.beginPath()
         ctx.arc(ring.x, ring.y, ring.radius, 0, Math.PI * 2)
-        ctx.strokeStyle  = ring.color
-        ctx.globalAlpha  = alpha
-        ctx.lineWidth    = 2.5 * (1 - progress * 0.5)
-        ctx.shadowBlur   = 30
-        ctx.shadowColor  = ring.color
-        ctx.stroke()
-        ctx.restore()
+        ctx.strokeStyle = ring.color; ctx.globalAlpha = alpha
+        ctx.lineWidth = 2.5 * (1 - progress * 0.5)
+        ctx.shadowBlur = 30; ctx.shadowColor = ring.color
+        ctx.stroke(); ctx.restore()
       }
 
-      // ── Draw & age bolts ──
       for (let i = state.bolts.length - 1; i >= 0; i--) {
-        const bolt = state.bolts[i]
-        bolt.life++
+        const bolt = state.bolts[i]; bolt.life++
         const progress = bolt.life / bolt.maxLife
         const alpha    = bolt.alpha * (1 - progress)
         if (alpha <= 0.01 || bolt.life >= bolt.maxLife) { state.bolts.splice(i, 1); continue }
-
         const drawBoltPath = (pts, width, a) => {
           if (pts.length < 2) return
-          ctx.save()
+          ctx.save(); ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y)
+          pts.slice(1).forEach(p => ctx.lineTo(p.x, p.y))
+          ctx.strokeStyle = bolt.color; ctx.globalAlpha = a; ctx.lineWidth = width
+          ctx.shadowBlur = 25 + (1 - progress) * 30; ctx.shadowColor = bolt.color
+          ctx.lineCap = 'round'; ctx.stroke()
           ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y)
           pts.slice(1).forEach(p => ctx.lineTo(p.x, p.y))
-          ctx.strokeStyle = bolt.color
-          ctx.globalAlpha = a
-          ctx.lineWidth   = width
-          ctx.shadowBlur  = 25 + (1 - progress) * 30
-          ctx.shadowColor = bolt.color
-          ctx.lineCap     = 'round'
-          ctx.stroke()
-          // inner white core
-          ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y)
-          pts.slice(1).forEach(p => ctx.lineTo(p.x, p.y))
-          ctx.strokeStyle = '#ffffff'
-          ctx.globalAlpha = a * 0.5
-          ctx.lineWidth   = width * 0.3
-          ctx.shadowBlur  = 8
-          ctx.shadowColor = '#ffffff'
-          ctx.stroke()
-          ctx.restore()
+          ctx.strokeStyle = '#ffffff'; ctx.globalAlpha = a * 0.5
+          ctx.lineWidth = width * 0.3; ctx.shadowBlur = 8; ctx.shadowColor = '#ffffff'
+          ctx.stroke(); ctx.restore()
         }
-
         drawBoltPath(bolt.points, bolt.width, alpha)
         bolt.branches.forEach(bp => drawBoltPath(bp, bolt.width * 0.5, alpha * 0.7))
       }
 
-      // ── Draw & age sparks ──
       for (let i = state.sparks.length - 1; i >= 0; i--) {
-        const sp = state.sparks[i]
-        sp.life++
-        sp.x  += sp.vx
-        sp.y  += sp.vy
-        sp.vx *= 0.94
-        sp.vy *= 0.94
+        const sp = state.sparks[i]; sp.life++
+        sp.x += sp.vx; sp.y += sp.vy; sp.vx *= 0.94; sp.vy *= 0.94
         const progress = sp.life / sp.maxLife
         const alpha    = (1 - progress) * 0.9
         if (alpha <= 0.05 || sp.life >= sp.maxLife) { state.sparks.splice(i, 1); continue }
-        ctx.save()
-        ctx.beginPath()
+        ctx.save(); ctx.beginPath()
         ctx.arc(sp.x, sp.y, sp.size * (1 - progress * 0.5), 0, Math.PI * 2)
-        ctx.fillStyle   = sp.color
-        ctx.globalAlpha = alpha
-        ctx.shadowBlur  = 14
-        ctx.shadowColor = sp.color
-        ctx.fill()
-        ctx.restore()
+        ctx.fillStyle = sp.color; ctx.globalAlpha = alpha
+        ctx.shadowBlur = 14; ctx.shadowColor = sp.color; ctx.fill(); ctx.restore()
       }
 
       animId = requestAnimationFrame(draw)
@@ -418,28 +351,46 @@ function ElectricStorm({ active, circleRef, sectionRef }) {
   }, [])
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 pointer-events-none"
-      style={{ zIndex: 20, width: '100%', height: '100%' }}
-    />
+    <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" style={{ zIndex: 20, width: '100%', height: '100%' }} />
   )
 }
 
-// ──────────────────────────────────────────────
-// Main Hero
-// ──────────────────────────────────────────────
 export default function Hero({ isDark }) {
   const orbitContainerRef = useRef(null)
   const profileCircleRef  = useRef(null)
   const sectionRef        = useRef(null)
   const [hovering, setHovering] = useState(false)
 
+  // Responsive orbit size based on viewport
+  const [orbitSize, setOrbitSize] = useState(520)
+  const [profileSize, setProfileSize] = useState(300)
+  const [orbitRadius, setOrbitRadius] = useState(220)
+
+  useEffect(() => {
+    const update = () => {
+      const w = window.innerWidth
+      if (w < 400) {
+        setOrbitSize(300); setProfileSize(160); setOrbitRadius(120)
+      } else if (w < 640) {
+        setOrbitSize(340); setProfileSize(180); setOrbitRadius(140)
+      } else if (w < 768) {
+        setOrbitSize(400); setProfileSize(220); setOrbitRadius(170)
+      } else if (w < 1024) {
+        setOrbitSize(460); setProfileSize(260); setOrbitRadius(195)
+      } else {
+        setOrbitSize(540); setProfileSize(320); setOrbitRadius(230)
+      }
+    }
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [])
+
   return (
     <section
       ref={sectionRef}
       id="hero"
-      className="relative z-10 min-h-screen flex items-center pt-24 overflow-hidden"
+      className="relative z-10 min-h-screen flex items-center pt-20 pb-12 overflow-hidden"
     >
       {/* Grid background */}
       <div className={`absolute inset-0 ${isDark ? 'grid-bg' : 'grid-bg-light'} opacity-50`} />
@@ -447,128 +398,43 @@ export default function Hero({ isDark }) {
       {/* Ambient glow orbs */}
       {isDark && (
         <>
-          <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-neon-blue/5 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-neon-purple/5 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-cyan-500/3 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-1/4 left-1/4 w-64 sm:w-96 lg:w-[500px] h-64 sm:h-96 lg:h-[500px] bg-neon-blue/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-1/4 right-1/4 w-64 sm:w-96 lg:w-[500px] h-64 sm:h-96 lg:h-[500px] bg-neon-purple/5 rounded-full blur-3xl pointer-events-none" />
         </>
       )}
 
-      {/* ── ELECTRIC STORM — covers full section, fires on hover ── */}
       <ElectricStorm active={hovering} circleRef={profileCircleRef} sectionRef={sectionRef} />
 
-      <div className="max-w-7xl mx-auto px-6 w-full relative" style={{ zIndex: 10 }}>
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full relative" style={{ zIndex: 10 }}>
+        {/* ── MOBILE: stack vertically; LG: side-by-side ── */}
+        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
 
-          {/* ── LEFT ── */}
-          <div>
-            <motion.div
-              initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7 }}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8 text-xs font-body uppercase tracking-widest ${
-                isDark ? 'bg-green-500/10 border border-green-500/30 text-green-400' : 'bg-green-100 border border-green-400 text-green-700'
-              }`}
-            >
-              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-              System Online
-              <span className={`ml-2 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>v2.0.26</span>
-            </motion.div>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1 }}
-              className={`font-display font-black leading-none mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}
-            >
-              <span className="block text-5xl md:text-7xl lg:text-8xl">Jhon Lemon</span>
-              <span className={`block text-5xl md:text-7xl lg:text-8xl ${isDark ? 'neon-text' : 'text-blue-600'}`}>Galin</span>
-            </motion.h1>
-
-            <motion.div
-              initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}
-              className={`flex items-center gap-3 my-6 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}
-            >
-              <div className={`h-px w-12 ${isDark ? 'bg-neon-blue' : 'bg-blue-500'}`} />
-              <span className="font-body text-xs uppercase tracking-widest">AI Automation Specialist | Workflow Developer</span>
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="mb-8 h-6">
-              <TypeWriter isDark={isDark} texts={[
-                'Building intelligent automation systems...',
-                'Connecting apps with smart workflows...',
-                'Automating conversations with AI...',
-                'Reducing manual work for businesses...',
-              ]} />
-            </motion.div>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}
-              className={`text-base leading-relaxed mb-10 max-w-lg ${isDark ? 'text-slate-400' : 'text-slate-600'}`}
-            >
-              Building intelligent automation systems that help businesses streamline operations, automate conversations, and reduce manual work.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}
-              className="flex flex-wrap gap-4"
-            >
-              <motion.button
-                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                className={`btn-primary flex items-center gap-2 ${isDark ? 'bg-neon-blue text-dark-900 hover:bg-neon-cyan' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
-                style={{ clipPath: 'polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%)' }}
-                whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}
-              >
-                <Zap size={14} /> Automate Your Business
-              </motion.button>
-              <motion.button
-                onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-                className={`btn-primary flex items-center gap-2 border ${isDark ? 'border-neon-blue/50 text-neon-blue hover:bg-neon-blue/10' : 'border-blue-500 text-blue-600 hover:bg-blue-50'}`}
-                style={{ clipPath: 'polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%)' }}
-                whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}
-              >
-                <Eye size={14} /> View Projects
-              </motion.button>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.0 }}
-              className="flex gap-8 mt-12"
-            >
-              {[
-                { num: '50+',  label: 'Workflows Built' },
-                { num: '24/7', label: 'AI Automation'   },
-                { num: '100%', label: 'Client Focused'  },
-              ].map(s => (
-                <div key={s.label}>
-                  <div className={`font-display font-bold text-2xl ${isDark ? 'neon-text' : 'text-blue-600'}`}>{s.num}</div>
-                  <div className={`font-body text-xs uppercase tracking-wider ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>{s.label}</div>
-                </div>
-              ))}
-            </motion.div>
-          </div>
-
-          {/* ── RIGHT: Profile + Network ── */}
+          {/* ── PROFILE (shows first on mobile) ── */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.3 }}
-            className="relative flex items-center justify-center"
+            className="relative flex items-center justify-center order-first lg:order-last w-full"
           >
             <div
               ref={orbitContainerRef}
-              className="relative"
-              style={{ width: 620, height: 620, maxWidth: '100%', maxHeight: '100%' }}
+              className="relative flex-shrink-0"
+              style={{ width: orbitSize, height: orbitSize, maxWidth: '100%' }}
             >
-              {/* Lightning network background canvas */}
               <LightningNetwork isDark={isDark} containerRef={orbitContainerRef} />
 
               {/* Rotating rings */}
               {[1, 1.3, 1.6].map((scale, i) => {
-                const baseSize = 380, size = baseSize * scale
+                const baseSize = profileSize * 1.18
+                const size = baseSize * scale
                 return (
                   <div
                     key={i}
-                    className={`absolute rounded-full border ${
+                    className={`absolute rounded-full border transition-all duration-500 ${
                       hovering
                         ? (isDark ? 'border-neon-blue/40' : 'border-blue-400/40')
                         : (isDark ? 'border-neon-blue/15' : 'border-blue-300/20')
-                    } transition-all duration-500`}
+                    }`}
                     style={{
                       width: size, height: size,
                       top:  `calc(50% - ${size / 2}px)`,
@@ -576,43 +442,41 @@ export default function Hero({ isDark }) {
                       animation: `spin ${14 + i * 7}s linear infinite ${i % 2 === 0 ? '' : 'reverse'}`,
                       zIndex: 2,
                       boxShadow: hovering ? `0 0 ${20 + i * 10}px rgba(0,212,255,${0.2 - i * 0.05})` : 'none',
-                      transition: 'box-shadow 0.4s ease',
                     }}
                   />
                 )
               })}
 
-              {/* ── PROFILE CIRCLE ── */}
+              {/* Profile circle */}
               <div
                 ref={profileCircleRef}
                 onMouseEnter={() => setHovering(true)}
                 onMouseLeave={() => setHovering(false)}
+                onTouchStart={() => setHovering(true)}
+                onTouchEnd={() => setHovering(false)}
                 className={`absolute rounded-full overflow-hidden cursor-pointer transition-all duration-500 ${
                   isDark
                     ? hovering
-                      ? 'border-4 border-neon-blue shadow-[0_0_60px_rgba(0,212,255,0.8),0_0_120px_rgba(0,212,255,0.4),0_0_200px_rgba(0,212,255,0.2)]'
+                      ? 'border-4 border-neon-blue shadow-[0_0_60px_rgba(0,212,255,0.8),0_0_120px_rgba(0,212,255,0.4)]'
                       : 'border-4 border-neon-blue/60 shadow-neon-lg'
                     : hovering
                       ? 'border-4 border-blue-400 shadow-[0_0_60px_rgba(59,130,246,0.7)]'
                       : 'border-4 border-blue-400 shadow-xl'
                 }`}
                 style={{
-                  width: 380,
-                  height: 380,
-                  top:    'calc(50% - 200px)',
-                  left:   'calc(50% - 190px)',
+                  width:  profileSize,
+                  height: profileSize,
+                  top:    `calc(50% - ${profileSize / 2}px)`,
+                  left:   `calc(50% - ${profileSize / 2}px)`,
                   zIndex: 6,
                 }}
               >
-                {/* Profile photo — fills entire circle, no gap, no letterbox */}
                 <img
                   src={logo}
                   alt="Jhon Lemon Galin"
                   className="w-full h-full object-cover transition-transform duration-500"
                   style={{ transform: hovering ? 'scale(1.05)' : 'scale(1)' }}
                 />
-
-                {/* Hover: rim glow overlay (no icon, just light) */}
                 <div
                   className="absolute inset-0 rounded-full transition-opacity duration-300 pointer-events-none"
                   style={{
@@ -625,21 +489,23 @@ export default function Hero({ isDark }) {
               {/* Floating tool badges */}
               {floatingIcons.map((icon, i) => {
                 const rad = (icon.angle * Math.PI) / 180
-                const r   = 260
-                const x   = Math.cos(rad) * r
-                const y   = Math.sin(rad) * r
+                const x   = Math.cos(rad) * orbitRadius
+                const y   = Math.sin(rad) * orbitRadius
+                const badgeW = orbitSize < 360 ? 44 : 56
+                const badgeH = orbitSize < 360 ? 22 : 28
+                const fontSize = orbitSize < 360 ? 8 : 9
                 return (
                   <motion.div
                     key={icon.label}
                     className={`absolute flex items-center justify-center rounded-lg select-none ${isDark ? 'glass-dark' : 'glass-light'}`}
                     style={{
-                      left:           `calc(50% + ${x}px - 28px)`,
-                      top:            `calc(50% + ${y}px - 15px)`,
-                      width:          56,
-                      height:         28,
+                      left:           `calc(50% + ${x}px - ${badgeW / 2}px)`,
+                      top:            `calc(50% + ${y}px - ${badgeH / 2}px)`,
+                      width:          badgeW,
+                      height:         badgeH,
                       border:         `1px solid ${icon.color}50`,
                       color:          icon.color,
-                      fontSize:       9,
+                      fontSize:       fontSize,
                       fontFamily:     'Share Tech Mono, monospace',
                       animation:      `float ${4 + i * 0.5}s ease-in-out infinite`,
                       animationDelay: `${i * 0.4}s`,
@@ -656,13 +522,98 @@ export default function Hero({ isDark }) {
             </div>
           </motion.div>
 
+          {/* ── TEXT CONTENT ── */}
+          <div className="text-center lg:text-left order-last lg:order-first w-full">
+            <motion.div
+              initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7 }}
+              className={`inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full mb-6 text-xs font-body uppercase tracking-widest ${
+                isDark ? 'bg-green-500/10 border border-green-500/30 text-green-400' : 'bg-green-100 border border-green-400 text-green-700'
+              }`}
+            >
+              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+              System Online
+              <span className={`ml-2 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>v2.0.26</span>
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1 }}
+              className={`font-display font-black leading-none mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}
+            >
+              <span className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl">Jhon Lemon</span>
+              <span className={`block text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl ${isDark ? 'neon-text' : 'text-blue-600'}`}>Galin</span>
+            </motion.h1>
+
+            <motion.div
+              initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}
+              className={`flex items-center justify-center lg:justify-start gap-3 my-4 sm:my-6 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}
+            >
+              <div className={`h-px w-8 sm:w-12 ${isDark ? 'bg-neon-blue' : 'bg-blue-500'}`} />
+              <span className="font-body text-xs uppercase tracking-widest text-center">AI Automation Specialist | Workflow Developer</span>
+              <div className={`h-px w-8 sm:w-12 lg:hidden ${isDark ? 'bg-neon-blue' : 'bg-blue-500'}`} />
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="mb-6 h-6">
+              <TypeWriter isDark={isDark} texts={[
+                'Building intelligent automation systems...',
+                'Connecting apps with smart workflows...',
+                'Automating conversations with AI...',
+                'Reducing manual work for businesses...',
+              ]} />
+            </motion.div>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}
+              className={`text-sm sm:text-base leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}
+            >
+              Building intelligent automation systems that help businesses streamline operations, automate conversations, and reduce manual work.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}
+              className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start"
+            >
+              <motion.button
+                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                className={`btn-primary flex items-center justify-center gap-2 w-full sm:w-auto ${isDark ? 'bg-neon-blue text-dark-900 hover:bg-neon-cyan' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+                style={{ clipPath: 'polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%)' }}
+                whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}
+              >
+                <Zap size={14} /> Automate Your Business
+              </motion.button>
+              <motion.button
+                onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+                className={`btn-primary flex items-center justify-center gap-2 w-full sm:w-auto border ${isDark ? 'border-neon-blue/50 text-neon-blue hover:bg-neon-blue/10' : 'border-blue-500 text-blue-600 hover:bg-blue-50'}`}
+                style={{ clipPath: 'polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%)' }}
+                whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}
+              >
+                <Eye size={14} /> View Projects
+              </motion.button>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.0 }}
+              className="flex gap-6 sm:gap-8 mt-10 justify-center lg:justify-start"
+            >
+              {[
+                { num: '5+',   label: 'Workflows Built' },
+                { num: '24/7', label: 'AI Automation'   },
+                { num: '100%', label: 'Client Focused'  },
+              ].map(s => (
+                <div key={s.label} className="text-center lg:text-left">
+                  <div className={`font-display font-bold text-xl sm:text-2xl ${isDark ? 'neon-text' : 'text-blue-600'}`}>{s.num}</div>
+                  <div className={`font-body text-xs uppercase tracking-wider ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>{s.label}</div>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+
         </div>
       </div>
 
       {/* Scroll indicator */}
       <motion.button
         onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
-        className={`absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 ${
+        className={`absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 ${
           isDark ? 'text-neon-blue/50 hover:text-neon-blue' : 'text-blue-400/60 hover:text-blue-500'
         }`}
         style={{ zIndex: 15 }}
