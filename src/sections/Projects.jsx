@@ -14,7 +14,7 @@ import n8ngoogle     from '../assets/projects/n8n_google.png' // nandito pa rin 
 // ── Website project screenshot ──
 // Palitan mo lang ito ng actual screenshot ng Mend site.
 // Ilagay yung image file sa: src/assets/projects/websites/mend.png
-import mendScreenshot from '../assets/projects/websites/Mend1.png'
+import mendScreenshot from '../assets/projects/websites/mend1.png'
 
 // ── Projects Data ─────────────────────────────────────────────
 const projects = [
