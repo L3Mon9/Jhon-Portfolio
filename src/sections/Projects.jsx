@@ -4,10 +4,17 @@ import { X, ChevronLeft, ChevronRight, ExternalLink, Image } from 'lucide-react'
 import SectionWrapper, { SectionTitle } from '../components/SectionWrapper'
 
 // ── Real screenshots ──────────────────────────────────────────
-import n8nWorkflow     from '../assets/projects/n8n google.png'
-import googleSheets    from '../assets/projects/google_sheets.png'
-import gmailAutomation from '../assets/projects/gmail_n8n.png'
-import googleDrive     from '../assets/projects/gdrive.png'
+
+import n8nWorkflow     from '../assets/projects/facebook/n8n.png'
+import googleSheets    from '../assets/projects/facebook/google_sheets.png'
+import gmailAutomation from '../assets/projects/facebook/gmail_n8n.png'
+import googleDrive     from '../assets/projects/gdrive.png' 
+import n8ngoogle     from '../assets/projects/n8n_google.png' // nandito pa rin sa labas
+
+// ── Website project screenshot ──
+// Palitan mo lang ito ng actual screenshot ng Mend site.
+// Ilagay yung image file sa: src/assets/projects/websites/mend.png
+import mendScreenshot from '../assets/projects/websites/mend1.png'
 
 // ── Projects Data ─────────────────────────────────────────────
 const projects = [
@@ -51,7 +58,7 @@ const projects = [
     color: '#00d4ff',
     icon: '🎬',
     images: [
-      { label: 'n8n Video Automation Workflow', src: n8nWorkflow },
+      { label: 'n8n Video Automation Workflow', src: n8ngoogle },
       { label: 'Google Drive Output Files',      src: googleDrive },
     ],
   },
@@ -138,6 +145,26 @@ const projects = [
       { label: 'Sheets Tracker Update',   color: '#110500' },
     ],
   },
+  // ─── Website Projects ─────────────────────────────────────
+  // Dito mo ilalagay yung mga website (di-automation) projects mo.
+  {
+    id: 7,
+    category: 'website',
+    title: 'Mend — Healing Platform',
+    desc: 'A web application login/portal built for Mend, a healing-focused platform. Deployed live on Vercel.',
+    features: [
+      'Responsive login/portal UI',
+      'Deployed on Vercel',
+    ],
+    tags: ['React', 'Web App'],
+    color: '#10a37f',
+    icon: '🌐',
+    link: 'https://mend-healing.vercel.app/login', // ── live site URL, ginagawa itong clickable sa card ──
+    images: [
+      // Palitan mo yung mendScreenshot import sa taas ng path ng actual screenshot mo
+      { label: 'Mend Login Page', src: mendScreenshot },
+    ],
+  },
 ]
 
 const CATEGORIES = [
@@ -145,6 +172,7 @@ const CATEGORIES = [
   { key: 'n8n',         label: 'n8n',           color: '#00d4ff' },
   { key: 'gohighlevel', label: 'Go High Level', color: '#f97316' },
   { key: 'zapier',      label: 'Zapier',        color: '#ff4a00' },
+  { key: 'website',     label: 'Websites',      color: '#10a37f' },
 ]
 
 // ── MockScreenshot ────────────────────────────────────────────
@@ -327,7 +355,7 @@ export default function Projects({ isDark }) {
             viewport={{ once: true }}
             transition={{ delay: i * 0.08 }}
             whileHover={{ y: -4 }}
-            onClick={() => setActive(p)}
+            onClick={() => p.link ? window.open(p.link, '_blank', 'noopener,noreferrer') : setActive(p)}
             className={`rounded-xl overflow-hidden cursor-pointer transition-all duration-300 group ${isDark ? 'glass-dark' : 'glass-light'}`}
             style={{ border: `1px solid ${p.color}20` }}
             onMouseEnter={e => e.currentTarget.style.borderColor = `${p.color}60`}
@@ -365,7 +393,7 @@ export default function Projects({ isDark }) {
                   </div>
                 </div>
                 <div className="text-white/40 text-xs font-body flex items-center gap-1">
-                  <span>Tap to view gallery</span>
+                  <span>{p.link ? 'Visit Website' : 'Tap to view gallery'}</span>
                   <ExternalLink size={10} />
                 </div>
               </div>

@@ -42,7 +42,7 @@ export default function Footer({ isDark }) {
             <div className="flex gap-3">
               {[
                 { icon: Mail, href: 'mailto:galinjhonlemon@gmail.com', label: 'Email' },
-                { icon: Github, href: '#', label: 'GitHub' },
+                { icon: Github, href: '', label: 'GitHub' },
                 { icon: Linkedin, href: '#', label: 'LinkedIn' },
               ].map(({ icon: Icon, href, label }) => (
                 <motion.a key={label} href={href} target="_blank" title={label}
