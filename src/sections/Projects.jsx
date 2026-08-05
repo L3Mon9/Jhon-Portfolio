@@ -10,6 +10,7 @@ import googleSheets    from '../assets/projects/facebook/google_sheets.png'
 import gmailAutomation from '../assets/projects/facebook/gmail_n8n.png'
 import googleDrive     from '../assets/projects/gdrive.png' 
 import n8ngoogle     from '../assets/projects/n8n_google.png' // nandito pa rin sa labas
+import aiLeadQualification from '../assets/projects/N8n_projects/AiQualifications.png'
 
 // ── Website project screenshot ──
 // Palitan mo lang ito ng actual screenshot ng Mend site.
@@ -60,6 +61,28 @@ const projects = [
     images: [
       { label: 'n8n Video Automation Workflow', src: n8ngoogle },
       { label: 'Google Drive Output Files',      src: googleDrive },
+    ],
+  },
+  {
+    id: 8,
+    category: 'n8n',
+    title: 'AI Lead Qualification & Appointment System',
+    desc: 'An intelligent n8n workflow that captures form submissions, uses AI to score and classify each lead, stores the results in Google Sheets, and automatically follows up with qualified prospects. A connected Calendly workflow updates the booking status and sends appointment confirmations.',
+    features: [
+      'Captures new leads from an online form',
+      'Cleans and prepares submitted lead information',
+      'Uses AI to score and classify leads as Hot, Warm, or Cold',
+      'Generates a personalized response for each prospect',
+      'Stores lead details and qualification results in Google Sheets',
+      'Sends an automatic email when a lead meets the qualification rules',
+      'Detects new Calendly appointments and updates the matching lead record',
+      'Sends an appointment confirmation email after booking',
+    ],
+    tags: ['n8n', 'OpenRouter AI', 'Google Sheets', 'Calendly', 'Gmail'],
+    color: '#00d4ff',
+    icon: '🧠',
+    images: [
+      { label: 'AI Lead Qualification and Appointment Workflow', src: aiLeadQualification },
     ],
   },
   // ─── Go High Level ────────────────────────────────────────
