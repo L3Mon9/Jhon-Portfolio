@@ -1,6 +1,19 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, ChevronLeft, ChevronRight, ExternalLink, Image } from 'lucide-react'
+import {
+  X,
+  ChevronLeft,
+  ChevronRight,
+  ExternalLink,
+  Images,
+  Cpu,
+  Activity,
+  Layers3,
+  Sparkles,
+  ArrowUpRight,
+  Maximize2,
+  CheckCircle2,
+} from 'lucide-react'
 import SectionWrapper, { SectionTitle } from '../components/SectionWrapper'
 
 // ── Real screenshots ──────────────────────────────────────────
@@ -11,7 +24,8 @@ import gmailAutomation from '../assets/projects/facebook/gmail_n8n.png'
 import googleDrive     from '../assets/projects/gdrive.png' 
 import n8ngoogle     from '../assets/projects/n8n_google.png' // nandito pa rin sa labas
 import aiLeadQualification from '../assets/projects/N8n_projects/AiQualifications.png'
-
+import aiJobs1 from '../assets/projects/jobscraper/aijobs1.png'
+import aiJobs2 from '../assets/projects/jobscraper/aijobs2.png'
 // ── Website project screenshot ──
 // Palitan mo lang ito ng actual screenshot ng Mend site.
 // Ilagay yung image file sa: src/assets/projects/websites/mend.png
@@ -85,6 +99,44 @@ const projects = [
       { label: 'AI Lead Qualification and Appointment Workflow', src: aiLeadQualification },
     ],
   },
+  
+    {
+  id: 10,
+  category: 'n8n',
+  title: 'AI Job Scraper & Resume Optimizer',
+  desc: 'An end-to-end n8n automation that searches for relevant job opportunities and customizes a resume based on the selected job description. It connects Slack, AI, job APIs, Google Docs, Google Drive, and Gmail into one automated workflow.',
+  features: [
+    'Receives job-search requests through Slack',
+    'Validates job titles and search queries using AI',
+    'Finds relevant job openings through RapidAPI',
+    'Extracts job requirements and descriptions',
+    'Customizes the resume for the selected position',
+    'Updates the optimized resume in Google Docs',
+    'Creates an application email draft in Gmail',
+    'Sends results and status updates through Slack',
+  ],
+  tags: [
+    'n8n',
+    'OpenAI API',
+    'RapidAPI',
+    'Slack',
+    'Google Docs',
+    'Google Drive',
+    'Gmail',
+  ],
+  color: '#7b2fff',
+  icon: '💼',
+  images: [
+  {
+    label: 'AI Job Scraper Workflow',
+    src: aiJobs1,
+  },
+  {
+    label: 'AI Resume Optimizer Workflow',
+    src: aiJobs2,
+  },
+],
+},
   // ─── Go High Level ────────────────────────────────────────
   /*{
     id: 3,
@@ -195,19 +247,32 @@ const visibleProjects = projects.filter(project =>
 )
 
 const CATEGORIES = [
-  { key: 'all',         label: 'All Projects',  color: '#ffffff' },
-  { key: 'n8n',         label: 'n8n',           color: '#00d4ff' },
+  { key: 'all',         label: 'All Systems', color: '#8be9ff' },
+  { key: 'n8n',         label: 'AI Automation', color: '#00d4ff' },
   /*{ key: 'gohighlevel', label: 'Go High Level', color: '#f97316' },
   { key: 'zapier',      label: 'Zapier',        color: '#ff4a00' },*/
-  { key: 'website',     label: 'Websites',      color: '#10a37f' },
+  { key: 'website',     label: 'Web Systems', color: '#10f5a7' },
+]
+
+const metricCards = [
+  { icon: Cpu, value: visibleProjects.filter(p => p.category === 'n8n').length, label: 'Automation Systems' },
+  { icon: Layers3, value: new Set(visibleProjects.flatMap(p => p.tags)).size, label: 'Technologies Used' },
+  { icon: Activity, value: '24/7', label: 'Workflow Ready' },
 ]
 
 // ── MockScreenshot ────────────────────────────────────────────
 function MockScreenshot({ image, isDark }) {
   if (image.src) {
     return (
-      <div className="w-full h-full flex items-center justify-center bg-black">
-        <img src={image.src} alt={image.label} className="w-full h-full object-contain" />
+      <div className="relative w-full h-full flex items-center justify-center bg-[#02060c] overflow-hidden">
+        <div className="absolute inset-0 opacity-30" style={{ backgroundImage: 'linear-gradient(rgba(0,212,255,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(0,212,255,.08) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+        <img src={image.src} alt={image.label} className="relative z-[1] w-full h-full object-contain" />
+        <motion.div
+          className="absolute z-[2] left-0 right-0 h-px pointer-events-none"
+          style={{ background: 'linear-gradient(90deg, transparent, #00d4ff, transparent)', boxShadow: '0 0 14px #00d4ff' }}
+          animate={{ top: ['5%', '95%', '5%'] }}
+          transition={{ duration: 7, repeat: Infinity, ease: 'linear' }}
+        />
       </div>
     )
   }
@@ -246,100 +311,313 @@ function MockScreenshot({ image, isDark }) {
 }
 
 // ── Modal ─────────────────────────────────────────────────────
+// ── Modal ─────────────────────────────────────────────────────
 function Modal({ project, onClose, isDark }) {
   const [current, setCurrent] = useState(0)
-  const prev = () => setCurrent(c => (c - 1 + project.images.length) % project.images.length)
-  const next = () => setCurrent(c => (c + 1) % project.images.length)
 
+  const images = project?.images || []
+  const imageCount = images.length
+  const hasMultipleImages = imageCount > 1
+
+  const prev = () => {
+    if (!hasMultipleImages) return
+
+    setCurrent((currentIndex) =>
+      currentIndex === 0 ? imageCount - 1 : currentIndex - 1
+    )
+  }
+
+  const next = () => {
+    if (!hasMultipleImages) return
+
+    setCurrent((currentIndex) =>
+      currentIndex === imageCount - 1 ? 0 : currentIndex + 1
+    )
+  }
+
+  // Reset image when opening another project
   React.useEffect(() => {
-    const handler = (e) => {
-      if (e.key === 'Escape') onClose()
-      if (e.key === 'ArrowLeft') prev()
-      if (e.key === 'ArrowRight') next()
+    setCurrent(0)
+  }, [project?.id])
+
+  // Keyboard controls and page-scroll lock
+  React.useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        onClose()
+      }
+
+      if (event.key === 'ArrowLeft' && hasMultipleImages) {
+        setCurrent((currentIndex) =>
+          currentIndex === 0 ? imageCount - 1 : currentIndex - 1
+        )
+      }
+
+      if (event.key === 'ArrowRight' && hasMultipleImages) {
+        setCurrent((currentIndex) =>
+          currentIndex === imageCount - 1 ? 0 : currentIndex + 1
+        )
+      }
     }
-    window.addEventListener('keydown', handler)
-    return () => window.removeEventListener('keydown', handler)
-  }, [])
+
+    const originalOverflow = document.body.style.overflow
+
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.body.style.overflow = originalOverflow
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [hasMultipleImages, imageCount, onClose])
+
+  if (!project) return null
 
   return (
-    <AnimatePresence>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-4"
+      style={{
+        background: 'rgba(1, 4, 10, 0.94)',
+        backdropFilter: 'blur(14px)',
+      }}
+      onClick={onClose}
+    >
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
-        style={{ background: 'rgba(2,4,8,0.92)' }}
-        onClick={onClose}
+        initial={{ scale: 0.95, opacity: 0, y: 40 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.95, opacity: 0, y: 40 }}
+        className={`relative max-h-[95vh] w-full overflow-y-auto overflow-x-hidden rounded-t-[1.75rem] sm:max-w-5xl sm:rounded-[1.75rem] ${
+          isDark ? 'bg-[#050b14]' : 'bg-white'
+        }`}
+        style={{
+          border: `1px solid ${project.color}55`,
+          boxShadow: `0 0 70px ${project.color}18`,
+        }}
+        onClick={(event) => event.stopPropagation()}
       >
-        <motion.div
-          initial={{ scale: 0.95, opacity: 0, y: 40 }}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0.95, opacity: 0, y: 40 }}
-          className={`w-full sm:max-w-4xl rounded-t-2xl sm:rounded-2xl overflow-hidden max-h-[95vh] overflow-y-auto ${isDark ? 'glass-dark' : 'bg-white'}`}
-          onClick={e => e.stopPropagation()}
+        {/* Neon top line */}
+        <div
+          className="pointer-events-none absolute inset-x-0 top-0 z-30 h-px"
+          style={{
+            background: `linear-gradient(
+              90deg,
+              transparent,
+              ${project.color},
+              transparent
+            )`,
+          }}
+        />
+
+        {/* Header */}
+        <div
+          className="sticky top-0 z-40 flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4"
+          style={{
+            borderBottom: `1px solid ${project.color}30`,
+            background: isDark
+              ? 'rgba(5, 11, 20, 0.95)'
+              : 'rgba(255, 255, 255, 0.95)',
+            backdropFilter: 'blur(12px)',
+          }}
         >
-          {/* Header */}
-          <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 sticky top-0 z-10" style={{ borderBottom: `1px solid ${project.color}30`, background: isDark ? 'rgba(10,12,20,0.95)' : 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)' }}>
-            <div>
-              <span className="font-body text-xs uppercase tracking-widest" style={{ color: project.color }}>// Gallery</span>
-              <h3 className={`font-display font-bold text-base sm:text-lg mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>{project.title}</h3>
-            </div>
-            <button
-              onClick={onClose}
-              className={`w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-full transition-colors ml-3 ${isDark ? 'bg-white/5 hover:bg-white/10 text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}
+          <div className="min-w-0">
+            <span
+              className="flex items-center gap-2 font-body text-[10px] uppercase tracking-[0.28em]"
+              style={{ color: project.color }}
             >
-              <X size={14} />
-            </button>
+              System preview /
+              {imageCount > 0
+                ? ` ${String(current + 1).padStart(2, '0')} of ${String(
+                    imageCount
+                  ).padStart(2, '0')}`
+                : ' No image'}
+            </span>
+
+            <h3
+              className={`mt-0.5 truncate font-display text-base font-bold sm:text-lg ${
+                isDark ? 'text-white' : 'text-slate-900'
+              }`}
+            >
+              {project.title}
+            </h3>
           </div>
 
-          {/* Image viewer */}
-          <div className="relative h-52 sm:h-72 md:h-96">
-            <MockScreenshot image={project.images[current]} isDark={isDark} />
-            <button onClick={prev} className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors">
-              <ChevronLeft size={16} />
-            </button>
-            <button onClick={next} className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors">
-              <ChevronRight size={16} />
-            </button>
-            <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-2">
-              {project.images.map((_, i) => (
-                <button key={i} onClick={() => setCurrent(i)} className="w-2 h-2 rounded-full transition-all" style={{ background: i === current ? project.color : 'rgba(255,255,255,0.3)', transform: i === current ? 'scale(1.3)' : 'scale(1)' }} />
-              ))}
-            </div>
-            <div className="absolute top-3 left-3 px-2 sm:px-3 py-1 rounded-full text-xs font-body max-w-[60%] truncate" style={{ background: `${project.color}20`, border: `1px solid ${project.color}40`, color: project.color }}>
-              {project.images[current].label}
-            </div>
-          </div>
+          <button
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation()
+              onClose()
+            }}
+            aria-label="Close project preview"
+            className={`ml-3 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full transition-colors ${
+              isDark
+                ? 'bg-white/5 text-white hover:bg-white/10'
+                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            }`}
+          >
+            <X size={18} />
+          </button>
+        </div>
 
-          {/* Tags + Features */}
-          <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-            <div>
-              <p className={`text-xs uppercase tracking-widest mb-3 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>Tech Stack</p>
-              <div className="flex flex-wrap gap-2">
-                {project.tags.map(tag => (
-                  <span key={tag} className="px-3 py-1 rounded-full text-xs font-body" style={{ background: `${project.color}15`, border: `1px solid ${project.color}30`, color: project.color }}>
-                    {tag}
-                  </span>
+        {/* Image viewer */}
+        {imageCount > 0 ? (
+          <div
+            className="relative h-56 overflow-hidden border-y sm:h-80 md:h-[28rem]"
+            style={{ borderColor: `${project.color}20` }}
+          >
+            <MockScreenshot
+              image={images[current]}
+              isDark={isDark}
+            />
+
+            {/* Navigation arrows */}
+            {hasMultipleImages && (
+              <>
+                <button
+                  type="button"
+                  aria-label="Previous screenshot"
+                  onClick={(event) => {
+                    event.preventDefault()
+                    event.stopPropagation()
+                    prev()
+                  }}
+                  className="absolute left-2 top-1/2 z-30 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-xl border border-white/10 bg-[#02060c]/85 text-white shadow-xl backdrop-blur-xl transition-all hover:scale-105 hover:border-cyan-300/70 hover:bg-[#071525] active:scale-95 sm:left-4 sm:h-11 sm:w-11"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+
+                <button
+                  type="button"
+                  aria-label="Next screenshot"
+                  onClick={(event) => {
+                    event.preventDefault()
+                    event.stopPropagation()
+                    next()
+                  }}
+                  className="absolute right-2 top-1/2 z-30 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-xl border border-white/10 bg-[#02060c]/85 text-white shadow-xl backdrop-blur-xl transition-all hover:scale-105 hover:border-cyan-300/70 hover:bg-[#071525] active:scale-95 sm:right-4 sm:h-11 sm:w-11"
+                >
+                  <ChevronRight size={20} />
+                </button>
+              </>
+            )}
+
+            {/* Image indicators */}
+            {hasMultipleImages && (
+              <div className="absolute bottom-3 left-0 right-0 z-30 flex justify-center gap-2">
+                {images.map((image, index) => (
+                  <button
+                    type="button"
+                    key={`${image.label}-${index}`}
+                    aria-label={`View screenshot ${index + 1}`}
+                    onClick={(event) => {
+                      event.preventDefault()
+                      event.stopPropagation()
+                      setCurrent(index)
+                    }}
+                    className="h-2 rounded-full border border-white/20 transition-all"
+                    style={{
+                      width: index === current ? 30 : 8,
+                      background:
+                        index === current
+                          ? project.color
+                          : 'rgba(255, 255, 255, 0.35)',
+                      boxShadow:
+                        index === current
+                          ? `0 0 14px ${project.color}`
+                          : 'none',
+                    }}
+                  />
                 ))}
               </div>
-            </div>
-            <div>
-              <p className={`text-xs uppercase tracking-widest mb-3 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>Features</p>
-              <ul className="space-y-1">
-                {project.features.map(f => (
-                  <li key={f} className={`text-xs flex items-start gap-2 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                    <span className="flex-shrink-0 mt-0.5" style={{ color: project.color }}>▸</span> {f}
-                  </li>
-                ))}
-              </ul>
+            )}
+
+            {/* Image label */}
+            <div
+              className="absolute left-3 top-3 z-20 max-w-[70%] truncate rounded-lg px-3 py-1.5 font-body text-[10px] uppercase tracking-wider backdrop-blur-xl"
+              style={{
+                background: 'rgba(2, 6, 12, 0.78)',
+                border: `1px solid ${project.color}45`,
+                color: project.color,
+              }}
+            >
+              <Maximize2 size={10} className="mr-1.5 inline" />
+              {images[current]?.label || `Screenshot ${current + 1}`}
             </div>
           </div>
-        </motion.div>
+        ) : (
+          <div
+            className={`flex h-56 items-center justify-center border-y ${
+              isDark ? 'text-slate-500' : 'text-slate-400'
+            }`}
+            style={{ borderColor: `${project.color}20` }}
+          >
+            <p className="font-body text-sm">No preview image available</p>
+          </div>
+        )}
+
+        {/* Tags and features */}
+        <div className="grid grid-cols-1 gap-6 p-5 sm:gap-8 sm:p-7 md:grid-cols-[0.8fr_1.2fr]">
+          <div>
+            <p
+              className={`mb-3 text-[10px] uppercase tracking-[0.24em] ${
+                isDark ? 'text-slate-500' : 'text-slate-400'
+              }`}
+            >
+              Technology matrix
+            </p>
+
+            <div className="flex flex-wrap gap-2">
+              {project.tags?.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full px-3 py-1 font-body text-xs"
+                  style={{
+                    background: `${project.color}15`,
+                    border: `1px solid ${project.color}30`,
+                    color: project.color,
+                  }}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <p
+              className={`mb-3 text-[10px] uppercase tracking-[0.24em] ${
+                isDark ? 'text-slate-500' : 'text-slate-400'
+              }`}
+            >
+              System capabilities
+            </p>
+
+            <ul className="grid gap-2 sm:grid-cols-2">
+              {project.features?.map((feature) => (
+                <li
+                  key={feature}
+                  className={`flex items-start gap-2 text-xs ${
+                    isDark ? 'text-slate-300' : 'text-slate-600'
+                  }`}
+                >
+                  <CheckCircle2
+                    size={13}
+                    className="mt-0.5 flex-shrink-0"
+                    style={{ color: project.color }}
+                  />
+
+                  {feature}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </motion.div>
-    </AnimatePresence>
+    </motion.div>
   )
 }
-
 // ── Main Component ────────────────────────────────────────────
 export default function Projects({ isDark }) {
   const [active, setActive] = useState(null)
@@ -350,113 +628,141 @@ export default function Projects({ isDark }) {
     : visibleProjects.filter(p => p.category === filter)
 
   return (
-    <SectionWrapper id="projects" isDark={isDark}>
-      <SectionTitle label="Selected Work" title="Automation Projects" isDark={isDark} />
+    <SectionWrapper id="projects" isDark={isDark} className="overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className={`absolute inset-0 ${isDark ? 'opacity-100' : 'opacity-40'}`} style={{ backgroundImage: 'linear-gradient(rgba(0,212,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(0,212,255,.035) 1px, transparent 1px)', backgroundSize: '56px 56px', maskImage: 'linear-gradient(to bottom, transparent, black 18%, black 82%, transparent)' }} />
+        <motion.div className="absolute -left-32 top-32 h-80 w-80 rounded-full blur-[110px]" style={{ background: 'rgba(0,212,255,.14)' }} animate={{ x: [0, 80, 0], y: [0, -25, 0] }} transition={{ duration: 14, repeat: Infinity }} />
+        <motion.div className="absolute -right-32 bottom-12 h-96 w-96 rounded-full blur-[130px]" style={{ background: 'rgba(123,47,255,.14)' }} animate={{ x: [0, -70, 0], y: [0, 35, 0] }} transition={{ duration: 17, repeat: Infinity }} />
+      </div>
 
-      <p className={`max-w-2xl -mt-10 mb-8 text-sm leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-        Real workflows built to capture leads, connect business tools, automate follow-ups, and reduce repetitive work.
-      </p>
+      <div className="relative">
+        <SectionTitle label="AI Systems Portfolio" title="Automation Intelligence" isDark={isDark} />
+
+        <div className="-mt-10 mb-8 sm:mb-10 grid lg:grid-cols-[1fr_auto] gap-6 items-end">
+          <div>
+            <div className="mb-3 flex items-center gap-2 font-body text-[10px] uppercase tracking-[0.24em] text-emerald-400">
+              <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" /><span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" /></span>
+              Portfolio systems online
+            </div>
+            <p className={`max-w-2xl text-sm sm:text-base leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+              Intelligent workflows engineered to capture leads, connect business tools, automate decisions, and keep operations moving around the clock.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-3 gap-2 sm:gap-3">
+            {metricCards.map(({ icon: Icon, value, label }) => (
+              <div key={label} className={`min-w-0 sm:min-w-[116px] rounded-xl px-3 py-3 border backdrop-blur-xl ${isDark ? 'bg-[#06101b]/75 border-cyan-300/15' : 'bg-white/70 border-cyan-700/15'}`}>
+                <div className="flex items-center gap-2"><Icon size={13} className="text-cyan-400" /><span className={`font-display text-base sm:text-lg font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{value}</span></div>
+                <p className={`mt-1 text-[8px] sm:text-[9px] uppercase tracking-wider leading-tight ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>{label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
 
       {/* ── Filter Tabs — scrollable on mobile ── */}
-      <div className="flex gap-2 mb-6 sm:mb-8 overflow-x-auto pb-1 scrollbar-hide">
+      <div className={`relative flex gap-2 mb-7 sm:mb-10 overflow-x-auto p-1.5 rounded-2xl border backdrop-blur-xl scrollbar-hide ${isDark ? 'bg-[#040b14]/70 border-white/10' : 'bg-white/65 border-slate-200'}`}>
         {CATEGORIES.map(cat => {
           const isActive = filter === cat.key
           return (
             <button
               key={cat.key}
               onClick={() => setFilter(cat.key)}
-              className="px-3 sm:px-4 py-1.5 rounded-full text-xs font-body transition-all duration-200 flex-shrink-0"
+              className="relative px-4 sm:px-5 py-2.5 rounded-xl text-[10px] sm:text-xs uppercase tracking-wider font-body transition-all duration-300 flex-shrink-0 overflow-hidden"
               style={{
-                background: isActive ? `${cat.color}20` : 'transparent',
-                border:     `1px solid ${isActive ? cat.color : 'rgba(255,255,255,0.15)'}`,
+                background: isActive ? `${cat.color}16` : 'transparent',
+                border:     `1px solid ${isActive ? `${cat.color}65` : 'transparent'}`,
                 color:      isActive ? cat.color : (isDark ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.4)'),
+                boxShadow: isActive ? `inset 0 0 20px ${cat.color}0d, 0 0 18px ${cat.color}0d` : 'none',
               }}
             >
-              {cat.label}
+              <span className="relative z-10 flex items-center gap-2"><Sparkles size={12} />{cat.label}</span>
             </button>
           )
         })}
       </div>
 
       {/* ── Project Grid ── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+      <motion.div layout className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6">
         {filtered.map((p, i) => (
-          <motion.div
+          <motion.button
+            layout
             key={p.id}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.08 }}
-            whileHover={{ y: -4 }}
+            whileHover={{ y: -8 }}
+            whileTap={{ scale: 0.99 }}
             onClick={() => p.link ? window.open(p.link, '_blank', 'noopener,noreferrer') : setActive(p)}
-            className={`rounded-xl overflow-hidden cursor-pointer transition-all duration-300 group ${isDark ? 'glass-dark' : 'glass-light'}`}
-            style={{ border: `1px solid ${p.color}20` }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = `${p.color}60`}
-            onMouseLeave={e => e.currentTarget.style.borderColor = `${p.color}20`}
+            className={`relative text-left rounded-[1.35rem] overflow-hidden cursor-pointer transition-all duration-500 group ${isDark ? 'bg-[#050d17]/90' : 'bg-white/80'} backdrop-blur-xl`}
+            style={{ border: `1px solid ${p.color}28`, boxShadow: isDark ? '0 20px 60px rgba(0,0,0,.24)' : '0 20px 55px rgba(15,23,42,.09)' }}
           >
+            <div className="absolute inset-x-10 top-0 h-px opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: `linear-gradient(90deg, transparent, ${p.color}, transparent)`, boxShadow: `0 0 18px ${p.color}` }} />
+            <div className="absolute left-0 top-0 h-9 w-9 border-l border-t rounded-tl-[1.35rem] opacity-60" style={{ borderColor: p.color }} />
+            <div className="absolute right-0 bottom-0 h-9 w-9 border-r border-b rounded-br-[1.35rem] opacity-40" style={{ borderColor: p.color }} />
             {/* Card image */}
-            <div className="h-36 sm:h-44 relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${p.color}10, ${p.color}05)` }}>
+            <div className="h-48 sm:h-52 relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${p.color}12, #02060c)` }}>
               {p.images[0]?.src ? (
                 <img
                   src={p.images[0].src}
                   alt={p.images[0].label}
-                  className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                  className="absolute inset-0 w-full h-full object-cover object-top transition-all duration-700 group-hover:scale-[1.06] group-hover:saturate-125"
                 />
               ) : null}
 
               {/* Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#030911] via-transparent to-[#02060c]/45" />
+              <motion.div className="absolute left-0 right-0 h-px opacity-0 group-hover:opacity-100" style={{ background: `linear-gradient(90deg, transparent, ${p.color}, transparent)`, boxShadow: `0 0 14px ${p.color}` }} animate={{ top: ['10%', '90%'] }} transition={{ duration: 3.5, repeat: Infinity, ease: 'linear' }} />
               <div className="absolute inset-0 p-3 sm:p-4 flex flex-col justify-between">
                 <div className="flex justify-between items-start">
                   <span
-                    className="px-2 py-1 rounded text-xs font-body backdrop-blur-sm"
-                    style={{ background: `${p.color}25`, color: p.color, border: `1px solid ${p.color}40` }}
+                    className="px-2.5 py-1.5 rounded-lg text-[9px] uppercase tracking-[0.16em] font-body backdrop-blur-xl"
+                    style={{ background: 'rgba(2,6,12,.72)', color: p.color, border: `1px solid ${p.color}45` }}
                   >
                     {CATEGORIES.find(c => c.key === p.category)?.label}
                   </span>
-                  <div className="flex gap-1">
-                    {p.images.map((_, j) => (
-                      <div key={j} className="w-5 h-5 rounded flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.5)' }}>
-                        <Image size={10} color={p.color} />
-                      </div>
-                    ))}
+                  <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-black/60 border border-white/10 text-white/70 text-[9px] font-body backdrop-blur-xl">
+                    <Images size={11} color={p.color} /> {String(p.images.length).padStart(2, '0')}
                   </div>
                 </div>
-                <div className="text-white/40 text-xs font-body flex items-center gap-1">
-                  <span>{p.link ? 'Visit Website' : 'Tap to view gallery'}</span>
-                  <ExternalLink size={10} />
+                <div className="text-white/70 text-[10px] uppercase tracking-widest font-body flex items-center justify-between gap-2">
+                  <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />{p.link ? 'Live system' : 'Case study ready'}</span>
+                  {p.link ? <ExternalLink size={12} /> : <Maximize2 size={12} />}
                 </div>
               </div>
-              <div className="absolute bottom-0 left-0 right-0 h-12 sm:h-16 bg-gradient-to-t from-black/60 to-transparent" />
             </div>
 
             {/* Card body */}
-            <div className="p-4 sm:p-5">
+            <div className="relative p-5 sm:p-6">
+              <div className="mb-3 flex items-center justify-between">
+                <span className="font-mono text-[9px] uppercase tracking-[0.2em]" style={{ color: `${p.color}aa` }}>SYS-{String(p.id).padStart(3, '0')}</span>
+                <ArrowUpRight size={15} className="text-slate-500 transition-all duration-300 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </div>
               <h3
-                className={`font-display font-bold text-sm mb-2 transition-colors duration-200 ${isDark ? 'text-white' : 'text-slate-900'}`}
-                onMouseEnter={e => { if (isDark) e.target.style.color = p.color }}
-                onMouseLeave={e => { if (isDark) e.target.style.color = 'white' }}
+                className={`font-display font-bold text-base leading-snug mb-2 transition-colors duration-300 ${isDark ? 'text-white' : 'text-slate-900'}`}
               >
                 {p.title}
               </h3>
-              <p className={`text-xs leading-relaxed mb-4 line-clamp-2 sm:line-clamp-3 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>{p.desc}</p>
+              <p className={`text-xs leading-relaxed mb-5 line-clamp-3 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>{p.desc}</p>
               <div className="flex flex-wrap gap-1 sm:gap-1.5">
                 {p.tags.slice(0, 3).map(tag => (
-                  <span key={tag} className="px-2 py-0.5 rounded text-xs font-body" style={{ background: `${p.color}10`, color: p.color, border: `1px solid ${p.color}20` }}>
+                  <span key={tag} className="px-2.5 py-1 rounded-md text-[9px] uppercase tracking-wide font-body" style={{ background: `${p.color}0d`, color: p.color, border: `1px solid ${p.color}22` }}>
                     {tag}
                   </span>
                 ))}
                 {p.tags.length > 3 && (
-                  <span className="px-2 py-0.5 rounded text-xs font-body" style={{ background: `${p.color}10`, color: p.color, border: `1px solid ${p.color}20` }}>
+                  <span className="px-2.5 py-1 rounded-md text-[9px] font-body" style={{ background: `${p.color}0d`, color: p.color, border: `1px solid ${p.color}22` }}>
                     +{p.tags.length - 3}
                   </span>
                 )}
               </div>
             </div>
-          </motion.div>
+          </motion.button>
         ))}
-      </div>
+      </motion.div>
 
       {active && <Modal project={active} onClose={() => setActive(null)} isDark={isDark} />}
+      </div>
     </SectionWrapper>
   )
 }
