@@ -117,7 +117,7 @@ export default function ChatWidget() {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end">
 
       {/* ── Chat Window ── */}
       <AnimatePresence>
@@ -127,7 +127,7 @@ export default function ChatWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.25 }}
-            className="w-80 mb-4 rounded-2xl overflow-hidden flex flex-col"
+            className="w-[calc(100vw-2rem)] max-w-80 mb-3 sm:mb-4 rounded-2xl overflow-hidden flex flex-col"
             style={{
               height: 480,
               background: 'rgba(5,13,20,0.97)',
@@ -334,5 +334,4 @@ export default function ChatWidget() {
         }
       `}</style>
     </div>
-  )
-}
+  )}

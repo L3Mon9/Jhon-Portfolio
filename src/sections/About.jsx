@@ -1,11 +1,11 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { MapPin, Mail, Phone, Code2, Cpu } from 'lucide-react'
+import { MapPin, Mail, Code2, Cpu } from 'lucide-react'
 import SectionWrapper, { SectionTitle } from '../components/SectionWrapper'
 import GlassCard from '../components/GlassCard'
 
 const capabilities = ['AI Automation','Workflow Automation','Chatbot Development','API Integration','Lead Generation Automation','CRM Automation','Business Process Automation','System Integration']
-const stack = ['JavaScript','PHP','HTML','CSS','React.js']
+const stack = ['JavaScript','React.js','Python','Flask','Supabase','PostgreSQL']
 
 export default function About({ isDark }) {
   return (
@@ -16,16 +16,15 @@ export default function About({ isDark }) {
           <GlassCard isDark={isDark} delay={0.1}>
             <p className={`font-body text-xs uppercase tracking-widest mb-1 ${isDark ? 'text-neon-blue' : 'text-blue-600'}`}>// Bio</p>
             <p className={`text-sm leading-relaxed mb-4 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-              I am an AI Automation Specialist focused on building intelligent automation systems that help businesses streamline operations, automate conversations, capture leads, and reduce manual work.
+              I build practical AI automation systems that turn repetitive business tasks into reliable workflows.
             </p>
             <p className={`text-sm leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-              I design smart workflows that connect different applications and services using automation platforms and AI tools. My work focuses on helping businesses improve efficiency through automated processes, chatbot systems, and system integrations.
+              From lead qualification and appointment booking to AI chatbots and API integrations, I connect the tools a business already uses and make them work together with less manual effort.
             </p>
             <div className={`mt-6 pt-6 border-t ${isDark ? 'border-neon-blue/10' : 'border-blue-100'} space-y-3`}>
               {[
                 { icon: MapPin, text: 'Philippines', color: isDark ? 'text-neon-cyan' : 'text-blue-500' },
-                { icon: Mail, text: 'galinjhonlemon@gmail.com', color: isDark ? 'text-neon-blue' : 'text-blue-600' },
-                { icon: Phone, text: '09708784802', color: isDark ? 'text-neon-purple' : 'text-indigo-500' },
+                { icon: Mail, text: 'jhon.lemon.automation@gmail.com', color: isDark ? 'text-neon-blue' : 'text-blue-600' },
               ].map(({ icon: Icon, text, color }) => (
                 <div key={text} className={`flex items-center gap-3 font-body text-sm ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
                   <Icon size={14} className={color} />

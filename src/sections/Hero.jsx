@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { ChevronDown, Zap, Eye } from 'lucide-react'
-import logo from '../assets/profile.png'
+import { ChevronDown, Zap, Eye, Cpu, Workflow, ArrowUpRight } from 'lucide-react'
+import logo from '../assets/profileMain.jpg'
 
 const floatingIcons = [
   { label: 'n8n',     color: '#ff6b35', angle: 0   },
@@ -355,6 +355,66 @@ function ElectricStorm({ active, circleRef, sectionRef }) {
   )
 }
 
+function HeroVideoBackground({ isDark }) {
+  const videoRef = useRef(null)
+  const [videoReady, setVideoReady] = useState(false)
+  const [videoFailed, setVideoFailed] = useState(false)
+
+  useEffect(() => {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduceMotion || !videoRef.current) return
+
+    videoRef.current.play().catch(() => setVideoFailed(true))
+  }, [])
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+      {/* Premium fallback background remains visible while video loads or if it is unavailable. */}
+      <div
+        className={`absolute inset-0 transition-opacity duration-1000 ${videoReady && !videoFailed ? 'opacity-50' : 'opacity-100'}`}
+        style={{
+          background: isDark
+            ? 'radial-gradient(circle at 72% 35%, rgba(0,212,255,.16), transparent 32%), radial-gradient(circle at 18% 78%, rgba(123,47,255,.15), transparent 34%), linear-gradient(135deg, #020408 0%, #06111f 48%, #020408 100%)'
+            : 'radial-gradient(circle at 75% 30%, rgba(0,145,255,.16), transparent 32%), radial-gradient(circle at 15% 80%, rgba(123,47,255,.10), transparent 34%), linear-gradient(135deg, #f8fbff 0%, #edf7ff 52%, #f8fafc 100%)',
+        }}
+      />
+
+      {!videoFailed && (
+        <video
+          ref={videoRef}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${videoReady ? 'opacity-45' : 'opacity-0'}`}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          onCanPlay={() => setVideoReady(true)}
+          onError={() => setVideoFailed(true)}
+        >
+          <source src="/hero-automation.mp4" type="video/mp4" />
+        </video>
+      )}
+
+      {/* Video treatment: contrast, color grade, and soft edge vignette. */}
+      <div className={`absolute inset-0 ${isDark ? 'bg-dark-900/55' : 'bg-white/55'}`} />
+      <div
+        className="absolute inset-0"
+        style={{
+          background: isDark
+            ? 'linear-gradient(90deg, rgba(2,4,8,.96) 0%, rgba(2,4,8,.72) 43%, rgba(2,4,8,.30) 72%, rgba(2,4,8,.76) 100%)'
+            : 'linear-gradient(90deg, rgba(248,250,252,.98) 0%, rgba(248,250,252,.80) 45%, rgba(248,250,252,.42) 74%, rgba(248,250,252,.82) 100%)',
+        }}
+      />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_35%,rgba(2,4,8,.58)_100%)]" />
+      <motion.div
+        className="absolute -top-1/2 left-1/2 h-[180%] w-28 -rotate-[24deg] bg-gradient-to-b from-transparent via-cyan-300/10 to-transparent blur-2xl"
+        animate={{ x: ['-55vw', '55vw'] }}
+        transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
+      />
+    </div>
+  )
+}
+
 export default function Hero({ isDark }) {
   const orbitContainerRef = useRef(null)
   const profileCircleRef  = useRef(null)
@@ -390,10 +450,12 @@ export default function Hero({ isDark }) {
     <section
       ref={sectionRef}
       id="hero"
-      className="relative z-10 min-h-screen flex items-center pt-20 pb-12 overflow-hidden"
+      className="relative z-10 min-h-screen flex items-center pt-24 pb-16 overflow-hidden"
     >
+      <HeroVideoBackground isDark={isDark} />
+
       {/* Grid background */}
-      <div className={`absolute inset-0 ${isDark ? 'grid-bg' : 'grid-bg-light'} opacity-50`} />
+      <div className={`absolute inset-0 ${isDark ? 'grid-bg' : 'grid-bg-light'} opacity-35`} />
 
       {/* Ambient glow orbs */}
       {isDark && (
@@ -531,8 +593,7 @@ export default function Hero({ isDark }) {
               }`}
             >
               <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-              System Online
-              <span className={`ml-2 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>v2.0.26</span>
+              Available for freelance projects
             </motion.div>
 
             <motion.h1
@@ -542,6 +603,30 @@ export default function Hero({ isDark }) {
               <span className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl">Jhon Lemon</span>
               <span className={`block text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl ${isDark ? 'neon-text' : 'text-blue-600'}`}>Galin</span>
             </motion.h1>
+
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.25 }}
+              className="flex flex-wrap justify-center lg:justify-start gap-2 mt-5"
+            >
+              {[
+                { icon: Cpu, label: 'AI Agents' },
+                { icon: Workflow, label: 'Smart Workflows' },
+                { icon: Zap, label: 'API Integrations' },
+              ].map(({ icon: Icon, label }) => (
+                <span
+                  key={label}
+                  className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 font-body text-[10px] uppercase tracking-[0.16em] backdrop-blur-md ${
+                    isDark
+                      ? 'border-cyan-400/20 bg-cyan-400/[0.06] text-cyan-200/80'
+                      : 'border-blue-400/25 bg-white/55 text-blue-700'
+                  }`}
+                >
+                  <Icon size={11} /> {label}
+                </span>
+              ))}
+            </motion.div>
 
             <motion.div
               initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}
@@ -565,7 +650,7 @@ export default function Hero({ isDark }) {
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}
               className={`text-sm sm:text-base leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}
             >
-              Building intelligent automation systems that help businesses streamline operations, automate conversations, and reduce manual work.
+              I design reliable AI workflows that connect your apps, qualify leads, support customers, and keep your operations moving 24/7.
             </motion.p>
 
             <motion.div
@@ -578,7 +663,7 @@ export default function Hero({ isDark }) {
                 style={{ clipPath: 'polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%)' }}
                 whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}
               >
-                <Zap size={14} /> Automate Your Business
+                <Zap size={14} /> Book a Discovery Call <ArrowUpRight size={14} />
               </motion.button>
               <motion.button
                 onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}

@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Zap, Linkedin, Github } from "lucide-react";
+import { Mail, MapPin, Zap, Linkedin, Github, ArrowUpRight } from "lucide-react";
 import { InlineWidget } from "react-calendly";
 import SectionWrapper, { SectionTitle } from "../components/SectionWrapper";
 import GlassCard from "../components/GlassCard";
@@ -12,13 +12,6 @@ const contactLinks = [
     short: "Email",
     color: "#00d4ff",
     href: "mailto:jhon.lemon.automation@gmail.com",
-  },
-  {
-    icon: Phone,
-    label: "09708784802",
-    short: "Phone",
-    color: "#7b2fff",
-    href: "tel:09708784802",
   },
   {
     icon: Linkedin,
@@ -46,7 +39,7 @@ const contactLinks = [
 export default function Contact({ isDark }) {
   return (
     <SectionWrapper id="contact" isDark={isDark}>
-      <SectionTitle label="Initialize Connection" title="Book a Call" isDark={isDark} />
+      <SectionTitle label="Start a Conversation" title="Book a Discovery Call" isDark={isDark} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
 
@@ -58,7 +51,7 @@ export default function Contact({ isDark }) {
             viewport={{ once: true }}
           >
             <p className={`text-sm sm:text-base leading-relaxed mb-6 sm:mb-8 ${isDark ? "text-slate-300" : "text-slate-700"}`}>
-              Want to automate your business? Book a free consultation and let's discuss how AI and automation can streamline your workflow.
+              Have a process that takes too much time? Book a free discovery call and let&apos;s map out a practical automation that fits your business.
             </p>
 
             {/* AI Services card */}
@@ -80,9 +73,9 @@ export default function Contact({ isDark }) {
                 <motion.a
                   key={short}
                   href={href || "#"}
-                  target={href && !href.startsWith("mailto") && !href.startsWith("tel") ? "_blank" : undefined}
+                  target={href && !href.startsWith("mailto") ? "_blank" : undefined}
                   rel="noopener noreferrer"
-                  className={`flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg transition-all duration-300 group ${
+                  className={`relative flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl transition-all duration-300 group ${
                     isDark
                       ? "bg-dark-700 border border-white/5 hover:border-opacity-40"
                       : "bg-white border border-slate-100 hover:border-slate-300 hover:shadow-md"
@@ -101,6 +94,7 @@ export default function Contact({ isDark }) {
                       <span className="sm:hidden">{short}</span>
                       <span className="hidden sm:inline">{label}</span>
                     </span>
+                    {href && !href.startsWith("mailto") && <ArrowUpRight size={13} className="absolute right-4 opacity-40 group-hover:opacity-100" />}
                   </div>
                 </motion.a>
               ))}
@@ -111,12 +105,12 @@ export default function Contact({ isDark }) {
         {/* ── RIGHT: Calendly ── */}
         <GlassCard isDark={isDark} hover={false} delay={0.2} className="w-full">
           <h3 className={`font-display font-bold text-base sm:text-lg mb-4 ${isDark ? "text-white" : "text-slate-900"}`}>
-            📅 Free AI Automation Consultation
+             AI Automation Discovery Call
           </h3>
           {/* Calendly: fixed height on all screens, scrolls internally */}
-          <div className="w-full rounded-lg overflow-hidden" style={{ height: 550 }}>
+          <div className="w-full rounded-xl overflow-hidden border border-white/10" style={{ height: 550 }}>
             <InlineWidget
-              url="https://calendly.com/hexiaojian09/30min"
+              url="https://calendly.com/jhon-lemon-automation/30min"
               styles={{ height: "550px", minWidth: "100%" }}
             />
           </div>

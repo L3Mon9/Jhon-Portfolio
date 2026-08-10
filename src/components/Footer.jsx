@@ -41,9 +41,9 @@ export default function Footer({ isDark }) {
             <p className={`font-body text-xs uppercase tracking-widest mb-4 ${isDark ? 'text-neon-blue' : 'text-blue-600'}`}>Connect</p>
             <div className="flex gap-3">
               {[
-                { icon: Mail, href: 'mailto:galinjhonlemon@gmail.com', label: 'Email' },
-                { icon: Github, href: '', label: 'GitHub' },
-                { icon: Linkedin, href: '#', label: 'LinkedIn' },
+                { icon: Mail, href: 'mailto:jhon.lemon.automation@gmail.com', label: 'Email' },
+                { icon: Github, href: 'https://github.com/L3Mon9', label: 'GitHub' },
+                { icon: Linkedin, href: 'https://www.linkedin.com/in/jhon-lemon-galin-939826298/', label: 'LinkedIn' },
               ].map(({ icon: Icon, href, label }) => (
                 <motion.a key={label} href={href} target="_blank" title={label}
                   className={`w-9 h-9 flex items-center justify-center rounded-lg transition-all ${isDark ? 'bg-white/5 border border-white/10 text-slate-400 hover:border-neon-blue/50 hover:text-neon-blue' : 'bg-white border border-slate-200 text-slate-500 hover:border-blue-400 hover:text-blue-600'}`}

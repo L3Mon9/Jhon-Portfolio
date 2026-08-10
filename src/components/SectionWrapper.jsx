@@ -3,8 +3,8 @@ import { motion } from 'framer-motion'
 
 export default function SectionWrapper({ id, isDark, children, className = '' }) {
   return (
-    <section id={id} className={`relative z-10 py-24 ${className}`}>
-      <div className="max-w-7xl mx-auto px-6">
+    <section id={id} className={`relative z-10 py-16 sm:py-20 lg:py-24 scroll-mt-20 ${className}`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {children}
       </div>
     </section>
@@ -18,7 +18,7 @@ export function SectionTitle({ label, title, isDark }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
-      className="mb-16"
+      className="mb-12 sm:mb-16"
     >
       <p className={`font-body text-xs uppercase tracking-[0.3em] mb-3 ${isDark ? 'text-neon-blue' : 'text-blue-600'}`}>
         // {label}

@@ -22,6 +22,8 @@
   body {
     font-family: 'Exo 2', sans-serif;
     transition: background-color 0.3s, color 0.3s;
+    overflow-x: hidden;
+    text-rendering: optimizeLegibility;
   }
 
   .dark body {
@@ -50,7 +52,7 @@
 
 @layer components {
   .glass-dark {
-    background: rgba(8, 20, 34, 0.7);
+    background: linear-gradient(145deg, rgba(8, 20, 34, 0.82), rgba(4, 11, 20, 0.68));
     backdrop-filter: blur(20px);
     border: 1px solid rgba(0, 212, 255, 0.15);
   }
@@ -91,7 +93,16 @@
   }
 
   .btn-primary {
-    @apply px-6 py-3 font-display text-sm font-bold uppercase tracking-widest transition-all duration-300 relative overflow-hidden;
+    @apply px-6 py-3.5 font-display text-xs sm:text-sm font-bold uppercase tracking-widest transition-all duration-300 relative overflow-hidden rounded-sm;
+  }
+
+  .section-noise::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: .025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
   }
 
   .scan-line {
@@ -154,4 +165,17 @@
   content: '|';
   animation: blink 1s infinite;
   color: #00d4ff;
+}
+
+@media (max-width: 639px) {
+  .scan-line { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

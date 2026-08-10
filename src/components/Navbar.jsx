@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sun, Moon, Menu, X, Zap } from 'lucide-react'
-// 🔹 ADDED: Import logo image
-import logo from '../assets/profile.png'
+import { Sun, Moon, Menu, X, ArrowUpRight } from 'lucide-react'
 const navItems = ['About', 'Services', 'Tools', 'Projects', 'Experience', 'Contact']
 
 export default function Navbar({ isDark, toggleTheme }) {
@@ -34,7 +32,7 @@ export default function Navbar({ isDark, toggleTheme }) {
             : 'py-5 bg-transparent'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
           {/* Logo */}
           <motion.div
             className="flex items-center gap-2 cursor-pointer group"
@@ -49,7 +47,7 @@ export default function Navbar({ isDark, toggleTheme }) {
           </motion.div>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden lg:flex items-center gap-1">
             {navItems.map((item) => (
               <motion.button
                 key={item}
@@ -78,7 +76,13 @@ export default function Navbar({ isDark, toggleTheme }) {
               {isDark ? <Sun size={16} /> : <Moon size={16} />}
             </motion.button>
             <button
-              className={`md:hidden w-10 h-10 flex items-center justify-center ${isDark ? 'text-neon-blue' : 'text-blue-600'}`}
+              onClick={() => scrollTo('Contact')}
+              className={`hidden sm:flex items-center gap-2 px-4 py-2 rounded-full font-body text-xs uppercase tracking-wider transition-all ${isDark ? 'bg-neon-blue text-dark-900 hover:bg-neon-cyan' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+            >
+              Discovery Call <ArrowUpRight size={13} />
+            </button>
+            <button
+              className={`lg:hidden w-10 h-10 flex items-center justify-center ${isDark ? 'text-neon-blue' : 'text-blue-600'}`}
               onClick={() => setMobileOpen(!mobileOpen)}
             >
               {mobileOpen ? <X size={20} /> : <Menu size={20} />}
@@ -94,7 +98,7 @@ export default function Navbar({ isDark, toggleTheme }) {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className={`fixed top-16 left-4 right-4 z-40 rounded-lg p-4 ${isDark ? 'glass-dark' : 'glass-light'}`}
+            className={`fixed top-20 left-4 right-4 z-40 rounded-2xl p-3 shadow-2xl ${isDark ? 'glass-dark' : 'glass-light'}`}
           >
             {navItems.map((item, i) => (
               <motion.button

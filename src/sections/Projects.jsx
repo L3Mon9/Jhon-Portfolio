@@ -86,7 +86,7 @@ const projects = [
     ],
   },
   // ─── Go High Level ────────────────────────────────────────
-  {
+  /*{
     id: 3,
     category: 'gohighlevel',
     title: 'Lead Capture & Nurture Automation',
@@ -167,7 +167,7 @@ const projects = [
       { label: 'Order Notification Flow', color: '#1a0800' },
       { label: 'Sheets Tracker Update',   color: '#110500' },
     ],
-  },
+  },*/
   // ─── Website Projects ─────────────────────────────────────
   // Dito mo ilalagay yung mga website (di-automation) projects mo.
   {
@@ -190,11 +190,15 @@ const projects = [
   },
 ]
 
+const visibleProjects = projects.filter(project =>
+  project.images?.length > 0 && project.images.some(image => Boolean(image.src))
+)
+
 const CATEGORIES = [
   { key: 'all',         label: 'All Projects',  color: '#ffffff' },
   { key: 'n8n',         label: 'n8n',           color: '#00d4ff' },
-  { key: 'gohighlevel', label: 'Go High Level', color: '#f97316' },
-  { key: 'zapier',      label: 'Zapier',        color: '#ff4a00' },
+  /*{ key: 'gohighlevel', label: 'Go High Level', color: '#f97316' },
+  { key: 'zapier',      label: 'Zapier',        color: '#ff4a00' },*/
   { key: 'website',     label: 'Websites',      color: '#10a37f' },
 ]
 
@@ -341,11 +345,17 @@ export default function Projects({ isDark }) {
   const [active, setActive] = useState(null)
   const [filter, setFilter] = useState('all')
 
-  const filtered = filter === 'all' ? projects : projects.filter(p => p.category === filter)
+  const filtered = filter === 'all'
+    ? visibleProjects
+    : visibleProjects.filter(p => p.category === filter)
 
   return (
     <SectionWrapper id="projects" isDark={isDark}>
-      <SectionTitle label="Portfolio" title="Active Projects" isDark={isDark} />
+      <SectionTitle label="Selected Work" title="Automation Projects" isDark={isDark} />
+
+      <p className={`max-w-2xl -mt-10 mb-8 text-sm leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+        Real workflows built to capture leads, connect business tools, automate follow-ups, and reduce repetitive work.
+      </p>
 
       {/* ── Filter Tabs — scrollable on mobile ── */}
       <div className="flex gap-2 mb-6 sm:mb-8 overflow-x-auto pb-1 scrollbar-hide">
@@ -386,17 +396,13 @@ export default function Projects({ isDark }) {
           >
             {/* Card image */}
             <div className="h-36 sm:h-44 relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${p.color}10, ${p.color}05)` }}>
-              {p.images[0].src ? (
+              {p.images[0]?.src ? (
                 <img
                   src={p.images[0].src}
                   alt={p.images[0].label}
                   className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                 />
-              ) : (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-5xl sm:text-6xl opacity-20">{p.icon}</span>
-                </div>
-              )}
+              ) : null}
 
               {/* Overlay */}
               <div className="absolute inset-0 p-3 sm:p-4 flex flex-col justify-between">

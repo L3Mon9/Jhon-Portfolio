@@ -1,32 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export function useTheme() {
-  const [isDark, setIsDark] = useState(true)
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem('jlg-theme')
+    return saved ? saved === 'dark' : true
+  })
 
   useEffect(() => {
-    const saved = localStorage.getItem('theme')
-    if (saved === 'light') {
-      setIsDark(false)
-      document.documentElement.classList.remove('dark')
-    } else {
-      setIsDark(true)
-      document.documentElement.classList.add('dark')
-    }
-  }, [])
+    document.documentElement.classList.toggle('dark', isDark)
+    localStorage.setItem('jlg-theme', isDark ? 'dark' : 'light')
+  }, [isDark])
 
-  const toggle = () => {
-    setIsDark(prev => {
-      const next = !prev
-      if (next) {
-        document.documentElement.classList.add('dark')
-        localStorage.setItem('theme', 'light')
-      } else {
-        document.documentElement.classList.remove('dark')
-        localStorage.setItem('theme', 'light')
-      }
-      return next
-    })
-  }
-
-  return { isDark, toggle }
+  return { isDark, toggle: () => setIsDark(value => !value) }
 }
