@@ -30,6 +30,7 @@ import aiJobs2 from '../assets/projects/jobscraper/aijobs2.png'
 // Palitan mo lang ito ng actual screenshot ng Mend site.
 // Ilagay yung image file sa: src/assets/projects/websites/mend.png
 import mendScreenshot from '../assets/projects/websites/Mend1.png'
+import messenger from '../assets/projects/autoreply/messenger_fb.png'
 
 // ── Projects Data ─────────────────────────────────────────────
 const projects = [
@@ -54,6 +55,7 @@ const projects = [
       { label: 'n8n Automation Workflow',       src: n8nWorkflow },
       { label: 'Lead Data in Google Sheets',     src: googleSheets },
       { label: 'Automated Gmail Response',       src: gmailAutomation },
+      { label: 'Facebook Messenger',             src: messenger },
     ],
   },
   {
@@ -76,8 +78,7 @@ const projects = [
       { label: 'n8n Video Automation Workflow', src: n8ngoogle },
       { label: 'Google Drive Output Files',      src: googleDrive },
     ],
-  },
-  {
+  },{
     id: 8,
     category: 'n8n',
     title: 'AI Lead Qualification & Appointment System',
@@ -99,7 +100,50 @@ const projects = [
       { label: 'AI Lead Qualification and Appointment Workflow', src: aiLeadQualification },
     ],
   },
-  
+  {
+  id: 9,
+  category: 'n8n',
+  title: 'AI-Powered Dental Messenger Receptionist & Booking Automation',
+
+  desc: 'A hybrid AI receptionist built with n8n that automatically handles Facebook Messenger inquiries for dental clinics. It classifies patient messages, provides controlled replies for common and sensitive concerns, uses AI for flexible multilingual questions, sends personalized booking forms, stores appointment requests in Google Sheets, and notifies clinic staff through email.',
+
+  features: [
+    'Receives and processes patient inquiries from Facebook Messenger',
+    'Classifies messages into services, pricing, clinic information, booking, rescheduling, urgent concerns, and human assistance',
+    'Uses controlled responses for predictable and sensitive dental inquiries',
+    'Uses Google Gemini AI for flexible or unclassified questions',
+    'Understands and responds in English, Tagalog, and other supported languages',
+    'Provides safe responses for urgent dental concerns without giving medical diagnoses',
+    'Escalates conversations to clinic staff when human assistance is requested',
+    'Retrieves the patient’s Messenger profile information',
+    'Generates a personalized Jotform appointment link',
+    'Captures the Messenger name and sender ID through hidden form fields',
+    'Automatically saves appointment requests to Google Sheets',
+    'Assigns a unique booking ID and Pending booking status',
+    'Notifies clinic staff by email when a new booking request is submitted',
+  ],
+
+  tags: [
+    'n8n',
+    'Meta Messenger API',
+    'Google Gemini',
+    'Jotform',
+    'Google Sheets',
+    'Gmail',
+    'Webhooks',
+    'REST API',
+  ],
+
+  color: '#00d4ff',
+  icon: '🦷',
+
+  images: [
+    {
+      label: 'AI Dental Messenger Receptionist and Booking Workflow',
+      src: messenger,
+    },
+  ],
+},
     {
   id: 10,
   category: 'n8n',
