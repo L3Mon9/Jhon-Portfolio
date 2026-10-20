@@ -11,17 +11,17 @@ export default {
       },
       colors: {
         neon: {
-          blue: '#00d4ff',
-          cyan: '#00ffee',
-          purple: '#7b2fff',
+          blue: '#42d9ee',
+          cyan: '#6fe3bd',
+          purple: '#a68cff',
           pink: '#ff2d78',
         },
         dark: {
-          900: '#020408',
-          800: '#050d14',
-          700: '#081422',
-          600: '#0a1f33',
-          500: '#0d2a44',
+          900: '#06111d',
+          800: '#0a1c2b',
+          700: '#102638',
+          600: '#173447',
+          500: '#20445a',
         },
       },
       animation: {

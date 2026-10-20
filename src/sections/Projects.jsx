@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   X,
@@ -15,6 +16,7 @@ import {
   CheckCircle2,
 } from 'lucide-react'
 import SectionWrapper, { SectionTitle } from '../components/SectionWrapper'
+import AutomationFlow from '../components/AutomationFlow'
 
 // ── Real screenshots ──────────────────────────────────────────
 
@@ -829,12 +831,14 @@ export default function Projects({ isDark }) {
             whileHover={{ y: -8 }}
             whileTap={{ scale: 0.99 }}
             onClick={() => setActive(p)}
+            aria-label={p.category === 'n8n' ? `Open ${p.title} screenshots and details` : `Open ${p.title} project details`}
             className={`relative text-left rounded-[1.35rem] overflow-hidden cursor-pointer transition-all duration-500 group ${isDark ? 'bg-[#050d17]/90' : 'bg-white/80'} backdrop-blur-xl`}
             style={{ border: `1px solid ${p.color}28`, boxShadow: isDark ? '0 20px 60px rgba(0,0,0,.24)' : '0 20px 55px rgba(15,23,42,.09)' }}
           >
             <div className="absolute inset-x-10 top-0 h-px opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: `linear-gradient(90deg, transparent, ${p.color}, transparent)`, boxShadow: `0 0 18px ${p.color}` }} />
             <div className="absolute left-0 top-0 h-9 w-9 border-l border-t rounded-tl-[1.35rem] opacity-60" style={{ borderColor: p.color }} />
             <div className="absolute right-0 bottom-0 h-9 w-9 border-r border-b rounded-br-[1.35rem] opacity-40" style={{ borderColor: p.color }} />
+            {p.category === 'n8n' ? <AutomationFlow project={p} /> : <>
             {/* Card image */}
             <div className="h-48 sm:h-52 relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${p.color}12, #02060c)` }}>
               {p.images[0]?.src ? (
@@ -892,11 +896,12 @@ export default function Projects({ isDark }) {
                 )}
               </div>
             </div>
+            </>}
           </motion.button>
         ))}
       </motion.div>
 
-      {active && <Modal project={active} onClose={() => setActive(null)} isDark={isDark} />}
+      {active && createPortal(<Modal project={active} onClose={() => setActive(null)} isDark={isDark} />, document.body)}
       </div>
     </SectionWrapper>
   )

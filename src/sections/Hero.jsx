@@ -374,7 +374,7 @@ function HeroVideoBackground({ isDark }) {
         className={`absolute inset-0 transition-opacity duration-1000 ${videoReady && !videoFailed ? 'opacity-50' : 'opacity-100'}`}
         style={{
           background: isDark
-            ? 'radial-gradient(circle at 72% 35%, rgba(0,212,255,.16), transparent 32%), radial-gradient(circle at 18% 78%, rgba(123,47,255,.15), transparent 34%), linear-gradient(135deg, #020408 0%, #06111f 48%, #020408 100%)'
+            ? 'radial-gradient(circle at 72% 35%, rgba(66,217,238,.14), transparent 32%), radial-gradient(circle at 18% 78%, rgba(166,140,255,.12), transparent 34%), linear-gradient(135deg, #06111d 0%, #102638 48%, #06111d 100%)'
             : 'radial-gradient(circle at 75% 30%, rgba(0,145,255,.16), transparent 32%), radial-gradient(circle at 15% 80%, rgba(123,47,255,.10), transparent 34%), linear-gradient(135deg, #f8fbff 0%, #edf7ff 52%, #f8fafc 100%)',
         }}
       />
@@ -401,7 +401,7 @@ function HeroVideoBackground({ isDark }) {
         className="absolute inset-0"
         style={{
           background: isDark
-            ? 'linear-gradient(90deg, rgba(2,4,8,.96) 0%, rgba(2,4,8,.72) 43%, rgba(2,4,8,.30) 72%, rgba(2,4,8,.76) 100%)'
+            ? 'linear-gradient(90deg, rgba(6,17,29,.96) 0%, rgba(6,17,29,.76) 43%, rgba(6,17,29,.35) 72%, rgba(6,17,29,.82) 100%)'
             : 'linear-gradient(90deg, rgba(248,250,252,.98) 0%, rgba(248,250,252,.80) 45%, rgba(248,250,252,.42) 74%, rgba(248,250,252,.82) 100%)',
         }}
       />
@@ -465,7 +465,6 @@ export default function Hero({ isDark }) {
         </>
       )}
 
-      <ElectricStorm active={hovering} circleRef={profileCircleRef} sectionRef={sectionRef} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full relative" style={{ zIndex: 10 }}>
         {/* ── MOBILE: stack vertically; LG: side-by-side ── */}
@@ -652,6 +651,13 @@ export default function Hero({ isDark }) {
             >
               I design reliable AI workflows that connect your apps, qualify leads, support customers, and keep your operations moving 24/7.
             </motion.p>
+
+            <div className="ai-hero-pipeline" aria-label="Automation process: capture, understand, route, and deliver">
+              <span>01 Capture</span>
+              <span>02 Understand</span>
+              <span>03 Route</span>
+              <span>04 Deliver</span>
+            </div>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}

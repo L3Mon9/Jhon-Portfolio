@@ -18,7 +18,7 @@ function App() {
   const { isDark, toggle } = useTheme()
 
   return (
-    <div className={`min-h-screen transition-all duration-500 ${isDark ? 'dark bg-dark-900' : 'bg-slate-50'}`}>
+    <div className={`portfolio-shell min-h-screen transition-all duration-500 ${isDark ? 'dark' : ''}`}>
       
       {isDark && <ScanLine />}
       <ParticleBackground isDark={isDark} />

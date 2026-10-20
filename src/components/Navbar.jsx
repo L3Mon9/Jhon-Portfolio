@@ -43,6 +43,10 @@ export default function Navbar({ isDark, toggleTheme }) {
               style={{ clipPath: 'polygon(10% 0%, 90% 0%, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0% 90%, 0% 10%)' }}>
               <span className={`font-display font-black text-sm ${isDark ? 'text-neon-blue' : 'text-blue-600'}`}>JLG</span>
             </div>
+            <span className={`hidden sm:flex flex-col font-body uppercase leading-tight ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
+              <strong className="text-[10px] tracking-[0.22em]">Automation</strong>
+              <small className={`text-[9px] tracking-[0.18em] ${isDark ? 'text-cyan-300/65' : 'text-blue-600/70'}`}>Systems studio</small>
+            </span>
           
           </motion.div>
 
@@ -65,6 +69,9 @@ export default function Navbar({ isDark, toggleTheme }) {
 
           {/* Right: Theme + Mobile */}
           <div className="flex items-center gap-3">
+            <span className={`hidden xl:inline-flex items-center gap-2 rounded-md border px-3 py-2 font-body text-[10px] uppercase tracking-widest ${isDark ? 'border-emerald-400/25 bg-emerald-400/5 text-emerald-200' : 'border-emerald-600/25 bg-emerald-50 text-emerald-700'}`}>
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" /> Systems online
+            </span>
             <motion.button
               onClick={toggleTheme}
               className={`w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300 ${
