@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronDown, Zap, Eye, Cpu, Workflow, ArrowUpRight } from 'lucide-react'
-import logo from '../assets/profile.png'
+import logo from '../assets/profile1.jpg'
 
 const floatingIcons = [
   { label: 'n8n',     color: '#ff6b35', angle: 0   },

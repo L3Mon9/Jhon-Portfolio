@@ -30,6 +30,15 @@ import aiJobs2 from '../assets/projects/jobscraper/aijobs2.png'
 // Palitan mo lang ito ng actual screenshot ng Mend site.
 // Ilagay yung image file sa: src/assets/projects/websites/mend.png
 import mendScreenshot from '../assets/projects/websites/Mend1.png'
+import jhonHome from '../assets/projects/websites/jhon-home.png'
+import jhonCare from '../assets/projects/websites/jhon-care.png'
+import jhonClinic from '../assets/projects/websites/jhon-clinic.png'
+import jhonSmileStories from '../assets/projects/websites/jhon-smile-stories.png'
+import jhonPatientGuide from '../assets/projects/websites/jhon-patient-guide.png'
+import jhonFacilities from '../assets/projects/websites/jhon-facilities.png'
+import jhonFindUs from '../assets/projects/websites/jhon-find-us.png'
+import jhonCareers from '../assets/projects/websites/jhon-careers.png'
+import jhonBooking from '../assets/projects/websites/jhon-booking.png'
 import messenger from '../assets/projects/autoreply/messenger_fb.png'
 
 // ── Projects Data ─────────────────────────────────────────────
@@ -282,6 +291,44 @@ const projects = [
     images: [
       // Palitan mo yung mendScreenshot import sa taas ng path ng actual screenshot mo
       { label: 'Mend Login Page', src: mendScreenshot },
+    ],
+  },
+  {
+    id: 11,
+    category: 'website',
+    title: 'Jhon Dental Clinics — Website Concept',
+    desc: 'A responsive dental clinic website concept that helps visitors explore treatments, prepare for a first visit, and try a guided appointment request demo.',
+    features: [
+      'Search and filter a treatment catalog by care category',
+      'Save treatments and compare sample prices and timing',
+      'Explore an interactive smile image comparison and clinic space gallery',
+      'Plan a visit through a guided, three-step booking demo',
+      'Read a first-visit checklist and expandable patient FAQs',
+      'Preview a map area, sample hours, and career role examples',
+      'Switch between light and night themes and choose analytics preferences',
+      'Use a quick-answer clinic guide for common questions',
+    ],
+    advantages: [
+      'Helps visitors understand their options before contacting a clinic',
+      'Makes care information easier to find through search, filters, and comparison',
+      'Gives first-time visitors a clearer picture of the visit experience',
+      'Provides a responsive, accessible starting point for a future clinic website',
+    ],
+    note: 'Concept demo: prices and opening hours are illustrative. Booking and career forms do not send submissions or reserve appointments; the map does not show a verified clinic address.',
+    tags: ['React', 'Vite', 'Responsive UI', 'Interactive Demo'],
+    color: '#b8d29b',
+    icon: '🦷',
+    link: 'https://jhondent.vercel.app/',
+    images: [
+      { label: 'Homepage', src: jhonHome },
+      { label: 'Treatment catalog', src: jhonCare },
+      { label: 'Our clinic', src: jhonClinic },
+      { label: 'Smile stories', src: jhonSmileStories },
+      { label: 'Patient guide', src: jhonPatientGuide },
+      { label: 'Facilities tour', src: jhonFacilities },
+      { label: 'Find us and map preview', src: jhonFindUs },
+      { label: 'Careers demo', src: jhonCareers },
+      { label: 'Visit booking demo', src: jhonBooking },
     ],
   },
 ]
@@ -601,6 +648,36 @@ function Modal({ project, onClose, isDark }) {
           </div>
         )}
 
+        {hasMultipleImages && (
+          <div className="flex gap-2 overflow-x-auto border-b p-3 sm:p-4" style={{ borderColor: `${project.color}20` }} aria-label="Project screenshots">
+            {images.map((image, index) => (
+              <button
+                key={`${image.label}-thumbnail`}
+                type="button"
+                onClick={() => setCurrent(index)}
+                aria-label={`View ${image.label}`}
+                aria-current={current === index ? 'true' : undefined}
+                className="w-28 flex-shrink-0 overflow-hidden rounded-lg border text-left sm:w-36"
+                style={{ borderColor: current === index ? project.color : `${project.color}35` }}
+              >
+                <img src={image.src} alt="" loading="lazy" className="h-14 w-full object-cover object-top sm:h-20" />
+                <span className={`block truncate px-2 py-1.5 text-[10px] ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>{image.label}</span>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {(project.desc || project.link) && (
+          <div className="flex flex-col gap-4 border-b px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-7" style={{ borderColor: `${project.color}20` }}>
+            <p className={`max-w-2xl text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>{project.desc}</p>
+            {project.link && (
+              <a href={project.link} target="_blank" rel="noopener noreferrer" className="inline-flex flex-shrink-0 items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-xs font-semibold transition-opacity hover:opacity-80" style={{ background: project.color, color: '#071512' }}>
+                Visit live site <ExternalLink size={14} />
+              </a>
+            )}
+          </div>
+        )}
+
         {/* Tags and features */}
         <div className="grid grid-cols-1 gap-6 p-5 sm:gap-8 sm:p-7 md:grid-cols-[0.8fr_1.2fr]">
           <div>
@@ -658,6 +735,20 @@ function Modal({ project, onClose, isDark }) {
             </ul>
           </div>
         </div>
+        {project.advantages && (
+          <div className="border-t px-5 py-5 sm:px-7" style={{ borderColor: `${project.color}20` }}>
+            <p className={`mb-3 text-[10px] uppercase tracking-[0.24em] ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>Advantages</p>
+            <ul className="grid gap-2 sm:grid-cols-2">
+              {project.advantages.map((advantage) => (
+                <li key={advantage} className={`flex items-start gap-2 text-xs ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                  <CheckCircle2 size={13} className="mt-0.5 flex-shrink-0" style={{ color: project.color }} />
+                  {advantage}
+                </li>
+              ))}
+            </ul>
+            {project.note && <p className={`mt-5 text-xs leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{project.note}</p>}
+          </div>
+        )}
       </motion.div>
     </motion.div>
   )
@@ -737,7 +828,7 @@ export default function Projects({ isDark }) {
             transition={{ delay: i * 0.08 }}
             whileHover={{ y: -8 }}
             whileTap={{ scale: 0.99 }}
-            onClick={() => p.link ? window.open(p.link, '_blank', 'noopener,noreferrer') : setActive(p)}
+            onClick={() => setActive(p)}
             className={`relative text-left rounded-[1.35rem] overflow-hidden cursor-pointer transition-all duration-500 group ${isDark ? 'bg-[#050d17]/90' : 'bg-white/80'} backdrop-blur-xl`}
             style={{ border: `1px solid ${p.color}28`, boxShadow: isDark ? '0 20px 60px rgba(0,0,0,.24)' : '0 20px 55px rgba(15,23,42,.09)' }}
           >
@@ -770,8 +861,8 @@ export default function Projects({ isDark }) {
                   </div>
                 </div>
                 <div className="text-white/70 text-[10px] uppercase tracking-widest font-body flex items-center justify-between gap-2">
-                  <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />{p.link ? 'Live system' : 'Case study ready'}</span>
-                  {p.link ? <ExternalLink size={12} /> : <Maximize2 size={12} />}
+                  <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />{p.link ? 'View gallery & live site' : 'Case study ready'}</span>
+                  <Maximize2 size={12} />
                 </div>
               </div>
             </div>
